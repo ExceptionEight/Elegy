@@ -1,0 +1,87 @@
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  background-color: red;
+}
+
+.effectsContainer {
+  width: 100%;
+  height: calc(100% - 60px);
+  width: calc(100% - 30px);
+  background-color: green;
+  margin: 0 auto;
+}
+
+.indent {
+  width: 100%;
+  height: 50px;
+  background-color: blue;
+}
+
+.commonEffectContainer {
+  width: 100%;
+  height: 50px;
+  border-radius: 20px;
+  border-color: black;
+  border-style: solid;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.effectName {
+  margin-left: 20px;
+}
+
+.controllCenter {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  background-color: pink;
+}
+
+.brightnessContainer {
+  background-color: yellow;
+  width: calc(100% - 60px);
+  height: 100%;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 90%;
+  height: 30px;
+  outline: none;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: black;
+    box-shadow: -100vw 0 0 100vw black;
+}
+
+.powerContainer {
+  background-color: violet;
+  width: 60px;
+  height: 100%;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.powerButtonImage {
+  width: 30px;
+  height: 30px;
+}
