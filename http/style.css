@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 @font-face {
   font-family: exo2;
   src: url(exo2.ttf);
