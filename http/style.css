@@ -55,6 +55,7 @@
   border-style: solid;
   border-color: black;
   border-radius: 20px;
+  background-size: 100%;
 }
 
 .hsvSlider::-webkit-slider-thumb {
@@ -63,6 +64,47 @@
     height: 7px;
     border-radius: 50%;
     background-color: white;
+}
+
+.saturationSlider {
+  -webkit-appearance: none;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #e66465, #9198e5);
+  outline: none;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20px;
+  background-size: 100%;
+}
+
+.saturationSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.speedSlider {
+  -webkit-appearance: none;
+  margin: 0;
+  width: 100%;
+  height: 100%;8e5);
+  outline: none;
+  border-style: solid;
+  border-color: black;
+  border-radius: 20px;
+  background-size: 100%;
+}
+
+.speedSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: black;
 }
 
 .effectName {
