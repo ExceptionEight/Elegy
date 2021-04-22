@@ -139,7 +139,7 @@ html, body {
   align-items: center;
 }
 
-.slider {
+.brightnessSlider {
   -webkit-appearance: none;
   width: 90%;
   height: 30px;
@@ -150,7 +150,7 @@ html, body {
   overflow: hidden;
 }
 
-.slider::-webkit-slider-thumb {
+.brightnessSlider::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px;
     height: 20px;

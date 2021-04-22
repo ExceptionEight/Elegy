@@ -5,9 +5,14 @@
 ESP8266WebServer server(80);
 FtpServer ftp;
 
+byte brightness = 100;
+byte accentColor = 15;
+byte saturation = 255;
+byte speed = 128;
+
 void setup()
 {
-  pinMode (2, OUTPUT);
+  pinMode (D4, OUTPUT);
   Serial.begin(115200);
   WiFi.begin("MGTS_GPON_E879", "77S33FGN");
   WiFi.softAP("Elegy", "12344321");
@@ -31,6 +36,7 @@ void setup()
   //  Serial.print(".");
   //}
   server.on("/powerSwitch", powerSwitch);
+  server.on("/config", config);
   //server.on("/setWifiConnection", api);
   server.onNotFound([](){
     if (!handleFileRead(server.uri()))
@@ -43,12 +49,22 @@ void setWifiConnection () {
 }
 
 void powerSwitch() {
-  if (server.arg("power" == "1")) {
+  if (server.arg("power")=="1") {
     digitalWrite(D4, LOW);
   }
   else {
     digitalWrite (D4, HIGH);
   }
+  server.send(200);
+}
+
+void config() {
+  byte brightness = server.arg("brightness").toInt();
+  byte accentColor = server.arg("accentColor").toInt();
+  byte saturation = server.arg("saturation").toInt();
+  byte speed = server.arg("speed").toInt();
+  Serial.print(brightness);
+  server.send(200);
 }
 
 void loop() {
