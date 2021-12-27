@@ -2,6 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <meta charset="utf-8">
 <script src ="jquery-3.6.0.min.js"> </script>
+<script src="script.js"></script>
 <head>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -16,7 +17,7 @@
         <div class="effectName"> Пульс </div>
         <div class="advancedEffectContainer">
           <div class = "commonSliderContainer">
-            <input type = "range" min="1" max = "255" value="100" class="hsvSlider">
+            <input type = "range" min="1" max = "255" value="100" class="hsvSlider" oninput='setAccentColor(this.value)'>
           </div>
           <div class = "commonSliderContainer">
             <input type = "range" min="1" max = "255" value="100" class="saturationSlider">
@@ -29,13 +30,12 @@
     </div>
     <div class="controllCenter">
       <div class = "brightnessContainer">
-        <input type = "range" min="1" max = "25" value="10" class="brightnessSlider" id="brightnessSlider" oninput="synced=false;">
+        <input type = "range" min="1" max = "25" value="10" class="brightnessSlider" id="brightnessSlider" oninput='setBrightness(this.value)'>
       </div>
       <div class = "powerContainer">
         <image src="powerButton.svg" class="powerButtonImage" onclick="powerSwitch();"> </image>
       </div>
     </div>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>
