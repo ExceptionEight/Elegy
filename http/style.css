@@ -38,13 +38,24 @@ html, body {
   margin-bottom: 10px;
 }
 
-.advancedEffectContainer {
-  width: 100%;
-  background-color: gold;
-  height: 100px;
+.commonEffectContainer.active {
+  background-color: #9198e5;
 }
 
-.commonSliderContainer {
+.effectName {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: exo2;
+  font-size: 26px;
+}
+
+.settingsEffectContainer {
+  width: 100%;
+  background-color: gold;
+}
+
+.effectSliderWrapper {
   width: 90%;
   height: 20px;
   background-color: aqua;
@@ -111,15 +122,6 @@ html, body {
     height: 7px;
     border-radius: 50%;
     background-color: black;
-}
-
-.effectName {
-  margin-left: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: brown;
-  font-family: exo2;
-  font-size: 26px;
 }
 
 .controllCenter {

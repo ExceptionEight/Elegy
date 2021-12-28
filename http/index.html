@@ -1,28 +1,26 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <meta charset="utf-8">
-<script src ="jquery-3.6.0.min.js"> </script>
-<script src="script.js"></script>
 <head>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div class="mainContainer">
-    <div class="effectsContainer">
+    <div class="effectsContainer" id="effectsContainer">
       <div class="indent"> </div>
       <div class = "commonEffectContainer">
         <div class="effectName"> Монотонный </div>
       </div>
       <div class = "commonEffectContainer">
         <div class="effectName"> Пульс </div>
-        <div class="advancedEffectContainer">
-          <div class = "commonSliderContainer">
+        <div class="settingsEffectContainer" id = "settingsEffectContainer">
+          <div class = "effectSliderWrapper">
             <input type = "range" min="1" max = "255" value="100" class="hsvSlider" oninput='setAccentColor(this.value)'>
           </div>
-          <div class = "commonSliderContainer">
+          <div class = "effectSliderWrapper">
             <input type = "range" min="1" max = "255" value="100" class="saturationSlider">
           </div>
-          <div class = "commonSliderContainer">
+          <div class = "effectSliderWrapper">
             <input type = "range" min="1" max = "255" value="100" class="speedSlider">
           </div>
         </div>
@@ -38,4 +36,7 @@
     </div>
   </div>
 </body>
+<script src ="jquery-3.6.0.min.js"> </script>
+<script src = "effects.js"> </script>
+<script src="script.js"></script>
 </html>
