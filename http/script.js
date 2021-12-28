@@ -13,11 +13,13 @@ const showEffects = () => {
     const commonEffectContainer = document.createElement('div')
     commonEffectContainer.className = 'commonEffectContainer'
     commonEffectContainer.id = Object.keys(effects)[i]
-    const effectName = document.createElement('div')
+    const effectName = document.createElement('p')
     effectName.className = 'effectName'
     effectName.innerHTML = effects[Object.keys(effects)[i]]['name']
 
     effectName.onclick = () => {
+      document.getElementById(selectedEffect.name).classList.remove ('active')
+      commonEffectContainer.className = 'commonEffectContainer active'
       //document.getElementById(selectedEffect).className =
       if (selectedEffect.name == Object.keys(effects)[i] && !selectedEffect.isSettingsActive) {
         showEffectSettings(commonEffectContainer, effects[Object.keys(effects)[i]])
@@ -108,19 +110,29 @@ const setSpeed = value => {
 }
 function configUpdater () {
   if (Object.keys(buffer).length > 0) {
-    if (buffer.mode) {
+    if (buffer.mode != null) {
       $.get(`setMode?value=${buffer.mode}`)
       delete buffer.mode
     }
 
-    if (buffer.brightness) {
+    if (buffer.brightness != null) {
       $.get(`setBrightness?value=${buffer.brightness}`)
       delete buffer.brightness
     }
 
-    if (buffer.accentColor) {
+    if (buffer.accentColor != null) {
       $.get(`setAccentColor?value=${buffer.accentColor}`)
       delete buffer.accentColor
+    }
+
+    if (buffer.saturation != null) {
+      $.get(`setSaturation?value=${buffer.saturation}`)
+      delete buffer.saturation
+    }
+
+    if (buffer.speed != null) {
+      $.get(`setSpeed?value=${buffer.speed}`)
+      delete buffer.speed
     }
   }
   setTimeout (configUpdater, 70);

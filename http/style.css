@@ -36,10 +36,15 @@ html, body {
   border-style: solid;
   background-color: white;
   margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
-.commonEffectContainer.active {
-  background-color: #9198e5;
+.active {
+  background-color: black;
+}
+
+.active p {
+  color: #fff;
 }
 
 .effectName {
@@ -47,7 +52,7 @@ html, body {
   margin-top: 10px;
   margin-bottom: 10px;
   font-family: exo2;
-  font-size: 26px;
+  font-size: 30px;
 }
 
 .settingsEffectContainer {
@@ -57,7 +62,7 @@ html, body {
 
 .effectSliderWrapper {
   width: 90%;
-  height: 20px;
+  height: 28px;
   background-color: aqua;
   margin: 10 auto;
 }

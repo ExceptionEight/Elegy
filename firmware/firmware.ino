@@ -89,10 +89,12 @@ void setAccentColor () {
 
 void setSaturation () {
   effect.saturation = server.arg("value").toInt();
+  server.send(200);
 }
 
 void setSpeed () {
   effect.speed = server.arg("value").toInt();
+  server.send(200);
 }
 
 void setMode () {
@@ -119,9 +121,17 @@ void loop() {
   ftp.handleFTP();
 
   for (int i = 0; i < NUM_LEDS; i++){
-    leds[i] = CHSV(effect.accentColor, 255, 255);
+    leds[i] = CHSV(effect.accentColor, effect.saturation, 255);
+  }
+  effect.accentColor += 127;
+  FastLED.show();
+  delay (35);
+
+  for (int i = 0; i < NUM_LEDS; i++){
+    leds[i] = CHSV(0, 0, 0);
   }
   FastLED.show();
+  delay (65);
 }
 
 bool handleFileRead(String path){
