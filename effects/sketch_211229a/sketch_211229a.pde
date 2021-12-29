@@ -41,24 +41,34 @@ void pulseInit () {
 void pulse () {
   if (step < 90) {
     
-  } else if (step < 110) {
+  } else if (step < 100) {
     for (int i = 0; i< 20; i++) {
       leds[i][0] = 0;
       leds[i][1] = 255;
-      leds[i][2] += 6;
+      leds[i][2] += 12;
       drawLed (i);
     }
-  } else if (step < 135) {
+    println (step + " " + leds[0][2]);
+  } else if (step < 115) {
     for (int i = 0; i< 20; i++) {
       leds[i][0] = 0;
       leds[i][1] = 255;
-      leds[i][2] -= 6;
+      leds[i][2] -= 12;
       drawLed (i);
     }
-  } else if (step < 550) {
-    
+    println (step + " " + leds[0][2]);
+  } else if (step < 120) {
+    for (int i = 0; i< 20; i++) {
+      leds[i][0] = 0;
+      leds[i][1] = 255;
+      leds[i][2] += 12;
+      drawLed (i);
+    }
+    println (step + " " + leds[0][2]);
+  } else {
+   step = 0; 
   }
-  println (step);
+  
   step++;
 }
 

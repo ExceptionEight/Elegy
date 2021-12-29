@@ -19,6 +19,7 @@ struct {
   byte saturation = 255;
   byte value = 128;
   uint step = 0;
+  byte mode = 0;
 } effect;
 
 
@@ -122,7 +123,18 @@ void loop() {
   server.handleClient();
   ftp.handleFTP();
 
-  pulse ();
+  if (effect.mode == 0) {
+    if (random(5) == 0) {
+      effect.mode = 1;
+    } else {
+      effect.mode = 2;
+    }
+  }
+  if (effect.mode == 1) {
+    heartbeat ();
+  } else if (effect.mode == 2) {
+    pulse ();
+  }
   delay (10);
 
   /*
@@ -142,28 +154,66 @@ void loop() {
 }
 
 void pulse () {
-  if (effect.step < 90) {
+  if (effect.step < 60) {
 
-  } else if (effect.step < 110) {
-    effect.value += 6;
+  } else if (effect.step < 70) {
+    effect.value += 12;
     for (int i = 0; i < NUM_LEDS; i++) {
       
       leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
     }
-  } else if (effect.step < 137) {
-    effect.value -= 6;
+  } else if (effect.step < 85) {
+    effect.value -= 12;
       for (int i = 0; i < NUM_LEDS; i++) {
         
         leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
     }
-  } else if (effect.step < 144) {
-    effect.value += 6;
+  } else if (effect.step < 90) {
+    effect.value += 12;
       for (int i = 0; i < NUM_LEDS; i++) {
         
         leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
     }
   } else {
     effect.step = 0;
+    effect.mode = 0;
+  }
+  FastLED.show();
+  effect.step++;
+}
+
+//
+void heartbeat () {
+  if (effect.step < 60) {
+
+  } else if (effect.step < 66) {
+    effect.value += 21;
+    for (int i = 0; i < NUM_LEDS; i++) {
+      
+      leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  } else if (effect.step < 71) {
+    effect.value -= 21;
+      for (int i = 0; i < NUM_LEDS; i++) {
+        
+        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  } else if (effect.step < 76) {
+    effect.value += 21;
+      for (int i = 0; i < NUM_LEDS; i++) {
+        
+        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+    } else if (effect.step < 82) {
+    effect.value -= 21;
+      for (int i = 0; i < NUM_LEDS; i++) {
+        
+        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  }
+     else {
+    effect.step = 0;
+    effect.mode = 0;
   }
   FastLED.show();
   effect.step++;
