@@ -17,6 +17,8 @@ struct {
   byte accentColor = 15;
   byte speed = 128;
   byte saturation = 255;
+  byte value = 128;
+  uint step = 0;
 } effect;
 
 
@@ -120,6 +122,10 @@ void loop() {
   server.handleClient();
   ftp.handleFTP();
 
+  pulse ();
+  delay (10);
+
+  /*
   for (int i = 0; i < NUM_LEDS; i++){
     leds[i] = CHSV(effect.accentColor, effect.saturation, 255);
   }
@@ -132,6 +138,35 @@ void loop() {
   }
   FastLED.show();
   delay (65);
+  */
+}
+
+void pulse () {
+  if (effect.step < 90) {
+
+  } else if (effect.step < 110) {
+    effect.value += 6;
+    for (int i = 0; i < NUM_LEDS; i++) {
+      
+      leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  } else if (effect.step < 137) {
+    effect.value -= 6;
+      for (int i = 0; i < NUM_LEDS; i++) {
+        
+        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  } else if (effect.step < 144) {
+    effect.value += 6;
+      for (int i = 0; i < NUM_LEDS; i++) {
+        
+        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+    }
+  } else {
+    effect.step = 0;
+  }
+  FastLED.show();
+  effect.step++;
 }
 
 bool handleFileRead(String path){
