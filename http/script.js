@@ -153,5 +153,6 @@ function powerSwitch(){
   else {
     $.get("powerSwitch?power=1");
   }
+  window.navigator.vibrate(10)
   power = !power;
 }

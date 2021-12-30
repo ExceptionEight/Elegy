@@ -104,5 +104,13 @@ void epelepsy () {
 }
 
 void rainbow () {
-
+  if (effect.step < 255) {
+        for (int i = 0; i < NUM_LEDS; i++){
+      leds[i] = CHSV(i+effect.step, 255, 255);
+    }
+      } else {
+        effect.step = 0;
+      }
+      effect.step += 2;
+    FastLED.show();
 }

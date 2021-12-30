@@ -1,6 +1,6 @@
 unsigned long timer = 0;
 void tickEffect () {
-  if (millis() - timer >= 10 && !effect.swapping) {
+  if (millis() - timer >= effect.speed && !effect.swapping) {
     timer = millis();
     switch (effect.current) {
     case 0:
