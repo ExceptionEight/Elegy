@@ -13,7 +13,7 @@ void setup () {
 void draw () {
   //PULSE 
   pulse();
-  delay (10);
+  delay (5);
 }
 
 void rainbow () {
@@ -39,9 +39,9 @@ void pulseInit () {
 }
 
 void pulse () {
-  if (step < 90) {
+  if (step < 60) {
     
-  } else if (step < 100) {
+  } else if (step < 70) {
     for (int i = 0; i< 20; i++) {
       leds[i][0] = 0;
       leds[i][1] = 255;
@@ -49,7 +49,7 @@ void pulse () {
       drawLed (i);
     }
     println (step + " " + leds[0][2]);
-  } else if (step < 115) {
+  } else if (step < 85) {
     for (int i = 0; i< 20; i++) {
       leds[i][0] = 0;
       leds[i][1] = 255;
@@ -57,7 +57,7 @@ void pulse () {
       drawLed (i);
     }
     println (step + " " + leds[0][2]);
-  } else if (step < 120) {
+  } else if (step < 90) {
     for (int i = 0; i< 20; i++) {
       leds[i][0] = 0;
       leds[i][1] = 255;

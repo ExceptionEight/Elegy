@@ -46,7 +46,6 @@ void heartbeat1 () {
     } else if (effect.step < 82) {
     effect.value -= 21;
       for (int i = 0; i < NUM_LEDS; i++) {
-        
         leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
     }
   }

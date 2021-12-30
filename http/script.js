@@ -8,24 +8,23 @@ const getParams = () => {
 }
 
 const showEffects = () => {
-  const amount = Object.keys(effects).length
-  for (let i = 0; i < amount; i++) {
+  Object.entries(effects).forEach (([key, value]) => {
     const commonEffectContainer = document.createElement('div')
     commonEffectContainer.className = 'commonEffectContainer'
-    commonEffectContainer.id = Object.keys(effects)[i]
+    commonEffectContainer.id = key
     const effectName = document.createElement('p')
     effectName.className = 'effectName'
-    effectName.innerHTML = effects[Object.keys(effects)[i]]['name']
+    effectName.innerHTML = value['name']
 
     effectName.onclick = () => {
+      setEffect (value['id'], value['settings'])
       document.getElementById(selectedEffect.name).classList.remove ('active')
       commonEffectContainer.className = 'commonEffectContainer active'
-      //document.getElementById(selectedEffect).className =
-      if (selectedEffect.name == Object.keys(effects)[i] && !selectedEffect.isSettingsActive) {
-        showEffectSettings(commonEffectContainer, effects[Object.keys(effects)[i]])
+      if (selectedEffect.name == key && !selectedEffect.isSettingsActive) {
+        showEffectSettings(commonEffectContainer, value['settings'])
         selectedEffect.isSettingsActive = true
       } else {
-        selectedEffect.name = Object.keys(effects)[i]
+        selectedEffect.name = key
         selectedEffect.isSettingsActive = false
         document.getElementById('settingsEffectContainer').remove()
       }
@@ -33,7 +32,7 @@ const showEffects = () => {
 
     commonEffectContainer.appendChild(effectName)
     document.getElementById('effectsContainer').appendChild(commonEffectContainer)
-  }
+  })
 }
 showEffects()
 
@@ -97,6 +96,15 @@ const setBrightness = value => {
   buffer.brightness = value * 10
 }
 
+const setEffect = (id, settings) => {
+  let query = `id=${id}`
+  if (settings['accentColor'] != null) query += `&accentColor=${settings['accentColor']}`
+  if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
+  if (settings['speed'] != null) query += `&speed=${settings['speed']}`
+  if (settings['interval'] != null) query += `&interval=${settings['interval']}`
+  buffer.effect = query
+}
+
 const setAccentColor = value => {
   buffer.accentColor = value
 }
@@ -110,9 +118,9 @@ const setSpeed = value => {
 }
 function configUpdater () {
   if (Object.keys(buffer).length > 0) {
-    if (buffer.mode != null) {
-      $.get(`setMode?value=${buffer.mode}`)
-      delete buffer.mode
+    if (buffer.effect != null) {
+      $.get(`setEffect?${buffer.effect}`)
+      delete buffer.effect
     }
 
     if (buffer.brightness != null) {

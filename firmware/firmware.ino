@@ -100,15 +100,25 @@ void setSpeed () {
 }
 
 void setEffect () {
-  if (effect.current != server.arg("id").toInt())
+  byte id = server.arg("id").toInt();
+  if (effect.current != id)
   {
     effect.swapping = true;
-    effect.current = server.arg("id").toInt();
+    effect.current = id;
     effect.step = 0;
     effect.mode = 0;
+    switch (id) {
+      case 1:
+        effect.accentColor = server.arg("accentColor").toInt();
+        break;
+      case 2:
+        effect.accentColor = server.arg("accentColor").toInt();
+        effect.value = 128;
+        break;
+    }
     effect.swapping = false;
-    server.send(200);
   }
+  server.send(200);
 }
 
 void config() {
