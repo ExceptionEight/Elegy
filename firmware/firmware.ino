@@ -16,10 +16,13 @@ byte brightness = 100;
 struct {
   byte accentColor = 15;
   byte speed = 128;
+  byte interval = 0;
   byte saturation = 255;
   byte value = 128;
   uint step = 0;
   byte mode = 0;
+  byte current = 2;
+  bool swapping = false;
 } effect;
 
 
@@ -56,15 +59,11 @@ void setup()
   server.on("/setAccentColor", setAccentColor);
   server.on("/setSaturation", setSaturation);
   server.on("/setSpeed", setSpeed);
-   server.on("/setSpeed", setMode);
+  server.on("/setEffect", setEffect);
   server.onNotFound([](){
     if (!handleFileRead(server.uri()))
     server.send (404, "text/plain", "DURILKA");
   });
-}
-
-void setWifiConnection () {
-
 }
 
 void powerSwitch() {
@@ -100,8 +99,16 @@ void setSpeed () {
   server.send(200);
 }
 
-void setMode () {
-  server.send(200);
+void setEffect () {
+  if (effect.current != server.arg("id").toInt())
+  {
+    effect.swapping = true;
+    effect.current = server.arg("id").toInt();
+    effect.step = 0;
+    effect.mode = 0;
+    effect.swapping = false;
+    server.send(200);
+  }
 }
 
 void config() {
@@ -115,108 +122,11 @@ void config() {
   server.send(200);
 }
 
-void solidMode() {
-
-}
-
 void loop() {
   server.handleClient();
   ftp.handleFTP();
-
-  if (effect.mode == 0) {
-    if (random(5) == 0) {
-      effect.mode = 1;
-    } else {
-      effect.mode = 2;
-    }
-  }
-  if (effect.mode == 1) {
-    heartbeat ();
-  } else if (effect.mode == 2) {
-    pulse ();
-  }
-  delay (10);
-
-  /*
-  for (int i = 0; i < NUM_LEDS; i++){
-    leds[i] = CHSV(effect.accentColor, effect.saturation, 255);
-  }
-  effect.accentColor += 127;
-  FastLED.show();
-  delay (35);
-
-  for (int i = 0; i < NUM_LEDS; i++){
-    leds[i] = CHSV(0, 0, 0);
-  }
-  FastLED.show();
-  delay (65);
-  */
-}
-
-void pulse () {
-  if (effect.step < 60) {
-
-  } else if (effect.step < 70) {
-    effect.value += 12;
-    for (int i = 0; i < NUM_LEDS; i++) {
-      
-      leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  } else if (effect.step < 85) {
-    effect.value -= 12;
-      for (int i = 0; i < NUM_LEDS; i++) {
-        
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  } else if (effect.step < 90) {
-    effect.value += 12;
-      for (int i = 0; i < NUM_LEDS; i++) {
-        
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  } else {
-    effect.step = 0;
-    effect.mode = 0;
-  }
-  FastLED.show();
-  effect.step++;
-}
-
-//
-void heartbeat () {
-  if (effect.step < 60) {
-
-  } else if (effect.step < 66) {
-    effect.value += 21;
-    for (int i = 0; i < NUM_LEDS; i++) {
-      
-      leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  } else if (effect.step < 71) {
-    effect.value -= 21;
-      for (int i = 0; i < NUM_LEDS; i++) {
-        
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  } else if (effect.step < 76) {
-    effect.value += 21;
-      for (int i = 0; i < NUM_LEDS; i++) {
-        
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-    } else if (effect.step < 82) {
-    effect.value -= 21;
-      for (int i = 0; i < NUM_LEDS; i++) {
-        
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
-    }
-  }
-     else {
-    effect.step = 0;
-    effect.mode = 0;
-  }
-  FastLED.show();
-  effect.step++;
+  tickEffect();
+//  delay (10);
 }
 
 bool handleFileRead(String path){
