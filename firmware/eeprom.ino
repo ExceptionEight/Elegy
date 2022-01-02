@@ -14,6 +14,7 @@ void hardReset () {
   EEPROM.write (117, 'r');
   //EEPROM.commit ();
   checkEEPROM ();
+}
 
 void checkEEPROM () {
   if (EEPROM.read(117) != 'w') {
