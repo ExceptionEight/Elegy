@@ -3,6 +3,7 @@
 #include <FS.h>
 #include <ESP8266FtpServer.h>
 #include <FastLED.h>
+#include <EEPROM.h>
 #define NUM_LEDS 60
 #define PIN 5
 ESP8266WebServer server(80);
@@ -28,32 +29,19 @@ struct {
 
 void setup()
 {
+  EEPROM.begin (512);
   pinMode (5, OUTPUT);
   pinMode (D4, OUTPUT);
   FastLED.addLeds<WS2812, PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(10);
   Serial.begin(115200);
-  WiFi.begin("MGTS_GPON_E879", "77S33FGN");
-  WiFi.softAP("Elegy", "12344321");
+  //WiFi.begin("TP-LINK_kapallink", "1p6a1p2a1969GenA77O98D08D");
+  //WiFi.softAP("Elegy", "12344321");
   SPIFFS.begin();
   server.begin();
   ftp.begin("admin", "admin");
 
-  File f = SPIFFS.open ("/wifi", "r");
-  if (!f) {
-    //Serial.print("AP");
-    //WiFi.softAP("Elegy", "12344321");
-  }
-  else {
-    Serial.print("Connecting");
-    //WiFi.begin("MGTS_GPON_E879", "77S33FGN");
-  }
-
-  //while (WiFi.status() != WL_CONNECTED)
-  //{
-  //  delay(500);
-  //  Serial.print(".");
-  //}
+  networkInit();
   server.on("/powerSwitch", powerSwitch);
   server.on("/setBrightness", setBrightness);
   server.on("/setAccentColor", setAccentColor);
@@ -121,22 +109,19 @@ void setEffect () {
   server.send(200);
 }
 
-void config() {
-  brightness = server.arg("brightness").toInt();
-  FastLED.setBrightness(server.arg("brightness").toInt());
-  byte brightness = server.arg("brightness").toInt();
-  byte accentColor = server.arg("accentColor").toInt();
-  byte saturation = server.arg("saturation").toInt();
-  byte speed = server.arg("speed").toInt();
-  Serial.print(brightness);
-  server.send(200);
-}
-
 void loop() {
   server.handleClient();
   ftp.handleFTP();
   tickEffect();
-//  delay (10);
+  if (Serial.available() >0) {
+    int data = Serial.parseInt ();
+    if (data <= 117) {
+      displayEEPROM (data);
+    }
+    if (data == 200) {
+      hardReset ();
+    }
+  }
 }
 
 bool handleFileRead(String path){
