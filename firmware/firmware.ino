@@ -29,6 +29,7 @@ struct {
 
 void setup()
 {
+  WiFi.disconnect();
   EEPROM.begin (512);
   pinMode (5, OUTPUT);
   pinMode (D4, OUTPUT);
@@ -48,6 +49,7 @@ void setup()
   server.on("/setSaturation", setSaturation);
   server.on("/setSpeed", setSpeed);
   server.on("/setEffect", setEffect);
+  server.on("/setWifi", setWifi);
   server.onNotFound([](){
     if (!handleFileRead(server.uri()))
     server.send (404, "text/plain", "DURILKA");
@@ -107,6 +109,33 @@ void setEffect () {
     effect.swapping = false;
   }
   server.send(200);
+}
+
+void setWifi () {
+  if (server.arg("ssid").length() <= 32 && server.arg("password").length() <=64) {
+    writeWifiSettings (server.arg("ssid"), server.arg("password"));
+  }
+  /*
+  char ssid[32];// = server.arg("ssid");
+  char password[64];
+
+  for (int i = 0; i < 32; i++) {
+    Serial.println (ssid[i]); 
+    }
+
+  server.arg("ssid").toCharArray (ssid, server.arg("ssid").length());
+  server.arg("password").toCharArray (ssid, 64);
+
+  
+  
+  Serial.println (server.arg("ssid")); 
+  writeWifiSettings (ssid, password);
+  */
+  //ssid = server.arg("ssid").toCharArray(0, 32);
+  //strcpy (ssid, server.arg("ssid").toCharArray(0, 32));
+  //char password[64] = server.arg("password");
+  //server.send(200);
+  ESP.reset();
 }
 
 void loop() {

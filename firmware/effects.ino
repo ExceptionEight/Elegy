@@ -76,7 +76,7 @@ void heartbeat2 () {
     effect.value += 12;
       for (int i = 0; i < NUM_LEDS; i++) {
         
-        leds[i]  = CHSV(effect.accentColor, effect.saturation, effect.value);
+        leds[i] = CHSV(effect.accentColor, effect.saturation, effect.value);
     }
   } else {
     effect.step = 0;

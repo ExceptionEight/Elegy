@@ -10,6 +10,25 @@
 //112-116 - power off
 //117 - initial run
 
+void writeWifiSettings(String ssid, String password) {
+for (int i = 0; i < 96; i++) {
+  EEPROM.write (i, 0);
+}
+
+for (int i = 0; i < ssid.length(); i++) {
+   EEPROM.write (i, ssid[i]); 
+  // Serial.println (ssid[i]);
+}
+
+for (int i = 0; i < password.length(); i++) {
+   EEPROM.write (i+32, password[i]); 
+   //Serial.println (password[i-32]);
+}
+EEPROM.commit ();
+//EEPROM.put (0, ssid);
+//EEPROM.put (32, password);
+}
+
 void hardReset () {
   EEPROM.write (117, 'r');
   //EEPROM.commit ();
