@@ -1,9 +1,11 @@
 void powerSwitch() {
-  if (server.arg("power")=="1") {
+  if (server.arg("power")=="0") {
+    device.power = false;
     digitalWrite(D4, LOW);
     FastLED.setBrightness(0);
   }
   else {
+    device.power = true;
     digitalWrite (D4, HIGH);
     FastLED.setBrightness(brightness);
   }
@@ -58,6 +60,33 @@ void setWifi () {
     writeWifiSettings (server.arg("ssid"), server.arg("password"));
   }
   ESP.reset();
+}
+
+void getEnviromint () {
+  //p = (power == true) ? "1" : "0";
+  //String response = "{\"power\":" + p + "}";
+  char response[230] = "";
+  strcat (response, "{\"power\":");
+  strcat (response, device.power ? "true" : "false");
+  strcat (response, ",\"connected\":");
+  strcat (response, (WiFi.status() == WL_CONNECTED) ? "true" : "false");
+  strcat (response, ",\"brightness\":");
+  itoa (brightness, response + strlen(response), DEC);
+  strcat (response, ",\"currentEffect\":");
+  itoa (effect.current, response + strlen(response), DEC);
+  strcat (response, ",\"uptime\":");
+  itoa (uptime.current, response + strlen(response), DEC);
+
+  strcat (response, ",\"powerOn\":");
+  itoa (uptime.powerOn, response + strlen(response), DEC);
+
+  strcat (response, ",\"powerOff\":");
+  itoa (uptime.powerOff, response + strlen(response), DEC);
+
+  strcat (response, ",\"powerCycle\":");
+  itoa (device.powerCycle, response + strlen(response), DEC);
+  strcat (response, "}");
+  server.send (200, "application/json", response);
 }
 
 bool handleFileRead(String path){

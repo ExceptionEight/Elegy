@@ -26,23 +26,35 @@ struct {
   bool swapping = false;
 } effect;
 
+struct {
+  unsigned long powerCycle;
+  bool power = true;
+} device;
+
+struct {
+  unsigned long current = 0;
+  unsigned long powerOff;
+  unsigned long powerOn;
+  unsigned long timer = 0;
+  unsigned long lastWrite = 0;
+} uptime;
 
 void setup()
 {
   WiFi.disconnect();
   EEPROM.begin (512);
+  checkEEPROM ();
+  recoverUptime ();
   pinMode (5, OUTPUT);
   pinMode (D4, OUTPUT);
   FastLED.addLeds<WS2812, PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(10);
   Serial.begin(115200);
-  //WiFi.begin("TP-LINK_kapallink", "1p6a1p2a1969GenA77O98D08D");
-  //WiFi.softAP("Elegy", "12344321");
   SPIFFS.begin();
   server.begin();
   ftp.begin("admin", "admin");
-
   networkInit();
+  incrementPowerCycle ();
   server.on("/powerSwitch", powerSwitch);
   server.on("/setBrightness", setBrightness);
   server.on("/setAccentColor", setAccentColor);
@@ -50,6 +62,7 @@ void setup()
   server.on("/setSpeed", setSpeed);
   server.on("/setEffect", setEffect);
   server.on("/setWifi", setWifi);
+  server.on("/getEnviromint", getEnviromint);
   server.onNotFound([](){
     if (!handleFileRead(server.uri()))
     server.send (404, "text/plain", "DURILKA");
@@ -60,6 +73,7 @@ void loop() {
   server.handleClient();
   ftp.handleFTP();
   tickEffect();
+  uptimeSaver();
   if (Serial.available() >0) {
     int data = Serial.parseInt ();
     if (data <= 117) {

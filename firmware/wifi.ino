@@ -9,7 +9,7 @@ void networkInit() {
   for (int i = 32; i < 96; i++) {
     password += char(EEPROM.read(i));
   }
-  Serial.println ("SSID: " + password);
+  Serial.println ("PASSWORD: " + password);
   WiFi.begin(ssid.c_str(), password.c_str());
   if (isWifiConnected(millis()+10000)) {
     Serial.println ("Wifi connected");

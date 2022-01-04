@@ -5,10 +5,11 @@
 //99 - accent color
 //100 - speed
 //101 - interval
-//102-106 - total uptime
-//107-111 - power on
-//112-116 - power off
-//117 - initial run
+//102-105 - total uptime
+//106-109 - power on
+//110-113 - power off
+//114-117 - power on counter
+//118 - initial run
 
 void writeWifiSettings(String ssid, String password) {
 for (int i = 0; i < 96; i++) {
@@ -25,25 +26,51 @@ for (int i = 0; i < password.length(); i++) {
    //Serial.println (password[i-32]);
 }
 EEPROM.commit ();
-//EEPROM.put (0, ssid);
-//EEPROM.put (32, password);
+}
+
+void writeUptime () {
+  writeUlongEEPROM (106, uptime.powerOn);
+  writeUlongEEPROM (110, uptime.powerOff);
+  EEPROM.commit();
 }
 
 void hardReset () {
-  EEPROM.write (117, 'r');
-  //EEPROM.commit ();
+  EEPROM.write (118, 'r');
   checkEEPROM ();
 }
 
 void checkEEPROM () {
-  if (EEPROM.read(117) != 'w') {
-    for (int i = 0; i < 116; i++) {
+  if (EEPROM.read(118) != 'w') {
+    for (int i = 0; i < 118; i++) {
       EEPROM.write (i, 0);
     }
-    EEPROM.write (117, 'w');
+    EEPROM.write (118, 'w');
+    EEPROM.commit ();
   }
 }
 
 void displayEEPROM (byte data) {
   Serial.println (EEPROM.read(data));
+}
+
+unsigned long readUlongEEPROM (int address) {
+  byte raw[4];
+  for (byte i = 0; i < 4; i++) raw[i] = EEPROM.read(address+i);
+  unsigned long &data = (unsigned long&)raw;
+  return data;
+}
+
+void writeUlongEEPROM (int address, unsigned long data) {
+  byte raw[4];
+  (unsigned long&) raw = data;
+  for (byte i = 0; i<4; i++) EEPROM.write (address+i, raw[i]);
+}
+
+void incrementPowerCycle () {
+  unsigned long counter = readUlongEEPROM (114);
+  counter++;
+  device.powerCycle = counter;
+  writeUlongEEPROM (114, counter);
+  Serial.println (device.powerCycle);
+  EEPROM.commit ();
 }
