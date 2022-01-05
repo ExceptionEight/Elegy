@@ -62,7 +62,7 @@ void setWifi () {
   ESP.reset();
 }
 
-void getEnviromint () {
+void getEnvironment () {
   //p = (power == true) ? "1" : "0";
   //String response = "{\"power\":" + p + "}";
   char response[230] = "";
@@ -92,8 +92,8 @@ void getEnviromint () {
 bool handleFileRead(String path){
   if(path.endsWith("/")) path += "index.html";
   String contentType = getContentType(path);
-  if(SPIFFS.exists(path)){
-    File file = SPIFFS.open(path, "r");
+  if(LittleFS.exists(path)){
+    File file = LittleFS.open(path, "r");
     size_t sent = server.streamFile(file, contentType);
     file.close();
     return true;

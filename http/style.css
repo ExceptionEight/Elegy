@@ -180,3 +180,62 @@ html, body {
   width: 30px;
   height: 30px;
 }
+
+.wifiText1 {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-family: sans-serif;
+  font-size: 60px;
+  color: fff;
+  font-weight: 700;
+
+}
+
+.wifiText2 {
+  margin-left: 20px;
+  font-family: sans-serif;
+  font-size: 30px;
+  color: fff;
+}
+
+.wifiInput {
+  width: 90%;
+  background-color: fff;
+  height: 30px;
+  margin: auto;
+  display: block;
+  justify-content: center;
+  border-radius: 15px;
+  margin-top: 15px;
+  padding-left: 10px;
+  font-size: 15px;
+  font-family: sans-serif;
+  outline: none;
+  border: none;
+}
+
+.wifiInput::placeholder {
+  color: grey;
+
+}
+
+.saveWifiConfigButton {
+  width: 45px;
+  height: 25px;
+  border-radius: 15px;
+  font-size: 15px;
+  font-family: sans-serif;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  margin-right: 20px;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.wifiButtonWrapper {
+  height: 50px;
+}

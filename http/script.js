@@ -3,8 +3,57 @@ let brightness = 100;
 let buffer = {}
 let selectedEffect = {name: 'solid', isSettingsActive: false}
 
-const getParams = () => {
+const showWifiCard = () => {
+  const commonEffectContainer = document.createElement('div')
+  commonEffectContainer.className = 'commonEffectContainer'
+  commonEffectContainer.style.background = 'black'
+  //commonEffectContainer.id = 'wifiSettings'
+  const wifiText1 = document.createElement('div')
+  wifiText1.className = 'wifiText1'
+  wifiText1.innerHTML = 'Ягода,'
+  const wifiText2 = document.createElement('div')
+  wifiText2.className = 'wifiText2'
+  wifiText2.innerHTML = 'настрой вайфай'
 
+  const wifiSSID = document.createElement('input')
+  wifiSSID.className = 'wifiInput'
+  wifiSSID.id = 'wifiSSID'
+  wifiSSID.placeholder = 'SSID'
+
+  const wifiPassword = document.createElement('input')
+  wifiPassword.className = 'wifiInput'
+  wifiPassword.id = 'wifiPassword'
+  wifiPassword.placeholder = 'Пароль'
+  wifiPassword.type = 'password'
+
+  const buttonWrapper = document.createElement('div')
+  buttonWrapper.className = 'wifiButtonWrapper'
+
+  const saveWifiConfigButton = document.createElement('div')
+  saveWifiConfigButton.className = 'saveWifiConfigButton'
+  saveWifiConfigButton.innerHTML = 'Оке'
+  saveWifiConfigButton.onclick = () => {
+    const ssid = document.getElementById('wifiSSID').value
+    const pass = document.getElementById('wifiPassword').value
+    if (ssid.length == 0 || ssid.length > 32) {
+      document.getElementById ('wifiSSID').style.borderStyle = "solid"
+      document.getElementById ('wifiSSID').style.borderColor = "red"
+    } else if (pass.length < 8) {
+      document.getElementById ('wifiPassword').style.borderStyle = "solid"
+      document.getElementById ('wifiPassword').style.borderColor = "red"
+    } else {
+        $.get(`setWifi?ssid=${ssid}&password=${pass}`)
+    }
+  }
+
+
+  commonEffectContainer.appendChild(wifiText1)
+  commonEffectContainer.appendChild(wifiText2)
+  commonEffectContainer.appendChild(wifiSSID)
+  commonEffectContainer.appendChild(wifiPassword)
+  buttonWrapper.appendChild(saveWifiConfigButton)
+  commonEffectContainer.appendChild(buttonWrapper)
+  document.getElementById('effectsContainer').appendChild(commonEffectContainer)
 }
 
 const showEffects = () => {
@@ -34,7 +83,6 @@ const showEffects = () => {
     document.getElementById('effectsContainer').appendChild(commonEffectContainer)
   })
 }
-showEffects()
 
 const showEffectSettings = (container, effect) => {
   const settingsEffectContainer = document.createElement('div')
@@ -156,3 +204,13 @@ function powerSwitch(){
   window.navigator.vibrate(10)
   power = !power;
 }
+let environment;
+const drawer = () => {
+
+  $.getJSON ('getEnvironment', data => {
+    document.getElementById('brightnessSlider').value = data.brightness/10
+    if (data.connected === false) showWifiCard()
+    showEffects()
+  })
+}
+drawer()
