@@ -5,15 +5,58 @@ void setup () {
   size (800, 200, P2D);
   colorMode(HSB);
   frameRate (75);
-  pulseInit ();
-  //println ()
-  
+  waveInit ();
 }
 
 void draw () {
-  //PULSE 
-  pulse();
-  delay (5);
+  //pulse ();
+  //rainbow ();
+  wave ();
+  delay (80);
+}
+
+void waveInit () {
+  for (int i = 0; i < 20; i++) {
+    leds[i][0] = 115;
+    leds[i][1] = 255;
+    leds[i][2] = 255;
+    drawLed (i);
+  }
+  col = 115-127;
+}
+
+void wave () {
+  background (255,255,0);
+  byte buffer = col;
+  if (step < 20) {
+    buffer = col;
+   // for (int i = 0; i< 20; i++) {
+      col+=10;
+   // }
+  } else if (step < 40) {
+    buffer = col;
+      col-=10;
+  } else {step = 0;}
+  leds[0][0] = buffer+127;
+  drawLed (0);
+  shiftLeds();
+  step++;
+}
+
+void shiftLeds () {
+  for (int i=19; i>0;i--) {
+   println (leds[i][0] + "(" + i + ")=" + leds[i-1][0] + "(" + (i-1) + ")");
+   leds[i][0] = leds[i-1][0]; 
+   drawLed (i);
+   //delay(100);
+  }
+}
+
+void shiftLeds2 () {
+  for (int i=19; i>1;i--) {
+   leds[i] = leds[i-1]; 
+   drawLed (i-1);
+  }
 }
 
 void rainbow () {
@@ -76,19 +119,3 @@ void drawLed (int led) {
   fill (leds[led][0], leds[led][1], leds[led][2]);
   circle (led*40+20, 40, 30);
 }
-
-
-/* RAINBOW (dash)
-background (255,255,0);
-  byte buffer = col;
-  for (int i = 0; i < 20; i++) {
-    leds[i][0] = buffer+127;
-    leds[i][1] = 255;
-    leds[i][2] = 255;
-    fill (leds[i][0], leds[i][1], leds[i][2]);
-    circle (i*40+20, 40, 30);
-    buffer+=2;
-  }
-  col +=2;
-  delay (15);
-*/

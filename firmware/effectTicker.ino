@@ -18,6 +18,9 @@ void tickEffect () {
     case 4:
       rainbow ();
       break;
+    case 5:
+      wave ();
+      break;
     }
   }
 }

@@ -127,10 +127,10 @@ const showEffectSettings = (container, effect) => {
     slider.className = 'speedSlider'
     slider.type = 'range'
     slider.min = 1
-    slider.max = 255
+    slider.max = 15
     slider.value = effect.speed
     slider.oninput = () => {
-      setSpeed(slider.value)
+      setSpeed(Number(slider.value))
     }
     sliderWrapper.appendChild(slider)
     settingsEffectContainer.appendChild(sliderWrapper)
@@ -162,7 +162,9 @@ const setSaturation = value => {
 }
 
 const setSpeed = value => {
-  buffer.speed = value
+  buffer.speed = 4+value*(value+1)/2
+  console.log (4+value*(value+1)/2)
+  console.log (value)
 }
 function configUpdater () {
   if (Object.keys(buffer).length > 0) {

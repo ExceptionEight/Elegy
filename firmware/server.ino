@@ -28,6 +28,9 @@ void setEffect () {
         effect.accentColor = server.arg("accentColor").toInt();
         effect.value = 128;
         break;
+      case 5:
+        effect.accentColor = server.arg("accentColor").toInt();
+        break;
     }
     effect.swapping = false;
   }

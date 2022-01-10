@@ -25,7 +25,7 @@ struct {
   byte value = 128;
   uint step = 0;
   byte mode = 0;
-  byte current = 2;
+  byte current = 5;
   bool swapping = false;
 } effect;
 
@@ -85,6 +85,9 @@ void loop() {
     }
     if (data == 200) {
       hardReset ();
+    }
+    if (data == 201) {
+      shiftLeds (1);
     }
   }
 }

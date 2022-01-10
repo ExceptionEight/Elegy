@@ -114,3 +114,23 @@ void rainbow () {
       effect.step += 2;
     FastLED.show();
 }
+
+void wave () {
+  leds[0] = CHSV (effect.accentColor, 255, 255);
+  if (effect.step < 21) {
+    effect.accentColor++;
+  } else if (effect.step < 41) {
+    effect.accentColor--;
+  } else {
+    effect.step = 0;
+  }
+  shiftLeds (1);
+  effect.step++;
+  FastLED.show();
+}
+
+void shiftLeds (byte amount) {
+  for (int i = NUM_LEDS-1; i > 0; i--) {
+    leds[i] = leds[i-1];
+  }
+}
