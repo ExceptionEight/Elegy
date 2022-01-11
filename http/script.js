@@ -1,5 +1,4 @@
 let power = false;
-let brightness = 100;
 let buffer = {}
 let selectedEffect = {name: 'solid', isSettingsActive: false}
 
@@ -7,7 +6,6 @@ const showWifiCard = () => {
   const commonEffectContainer = document.createElement('div')
   commonEffectContainer.className = 'commonEffectContainer'
   commonEffectContainer.style.background = 'black'
-  //commonEffectContainer.id = 'wifiSettings'
   const wifiText1 = document.createElement('div')
   wifiText1.className = 'wifiText1'
   wifiText1.innerHTML = 'Ягода,'
@@ -66,11 +64,11 @@ const showEffects = () => {
     effectName.innerHTML = value['name']
 
     effectName.onclick = () => {
-      setEffect (value['id'], value['settings'])
+      setEffect (key, value['id'])
       document.getElementById(selectedEffect.name).classList.remove ('active')
       commonEffectContainer.className = 'commonEffectContainer active'
       if (selectedEffect.name == key && !selectedEffect.isSettingsActive) {
-        showEffectSettings(commonEffectContainer, value['settings'])
+        showEffectSettings(commonEffectContainer, key)
         selectedEffect.isSettingsActive = true
       } else {
         selectedEffect.name = key
@@ -84,11 +82,12 @@ const showEffects = () => {
   })
 }
 
-const showEffectSettings = (container, effect) => {
+const showEffectSettings = (container, effectKey) => {
+  let data = JSON.parse(localStorage[effectKey])
   const settingsEffectContainer = document.createElement('div')
   settingsEffectContainer.className = 'settingsEffectContainer'
   settingsEffectContainer.id = 'settingsEffectContainer'
-  if (effect.accentColor != null) {
+  if (data.accentColor != null) {
     const sliderWrapper = document.createElement('div')
     sliderWrapper.className = 'effectSliderWrapper'
     const slider = document.createElement('input')
@@ -96,15 +95,18 @@ const showEffectSettings = (container, effect) => {
     slider.type = 'range'
     slider.min = 1
     slider.max = 255
-    slider.value = effect.accentColor
+    slider.value = data.accentColor
     slider.oninput = () => {
       setAccentColor(slider.value)
+      data.accentColor = slider.value
     }
+    slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
+    slider.ontouchend = () => localStorage.setItem(effectKey, JSON.stringify(data))
     sliderWrapper.appendChild(slider)
     settingsEffectContainer.appendChild(sliderWrapper)
   }
 
-  if (effect.saturation != null) {
+  if (data.saturation != null) {
     const sliderWrapper = document.createElement('div')
     sliderWrapper.className = 'effectSliderWrapper'
     const slider = document.createElement('input')
@@ -112,15 +114,18 @@ const showEffectSettings = (container, effect) => {
     slider.type = 'range'
     slider.min = 1
     slider.max = 255
-    slider.value = effect.saturation
+    slider.value = data.saturation
     slider.oninput = () => {
       setSaturation(slider.value)
+      data.saturation = slider.value
     }
+    slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
+    slider.ontouchend = () => localStorage.setItem(effectKey, JSON.stringify(data))
     sliderWrapper.appendChild(slider)
     settingsEffectContainer.appendChild(sliderWrapper)
   }
 
-  if (effect.speed != null) {
+  if (data.speed != null) {
     const sliderWrapper = document.createElement('div')
     sliderWrapper.className = 'effectSliderWrapper'
     const slider = document.createElement('input')
@@ -128,15 +133,17 @@ const showEffectSettings = (container, effect) => {
     slider.type = 'range'
     slider.min = 1
     slider.max = 15
-    slider.value = effect.speed
+    slider.value = data.speed
     slider.oninput = () => {
       setSpeed(Number(slider.value))
+      data.speed = slider.value
     }
+    slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
+    slider.ontouchend = () => localStorage.setItem(effectKey, JSON.stringify(data))
     sliderWrapper.appendChild(slider)
     settingsEffectContainer.appendChild(sliderWrapper)
   }
   container.appendChild(settingsEffectContainer)
-console.log (effect)
 }
 
 configUpdater();
@@ -144,7 +151,8 @@ const setBrightness = value => {
   buffer.brightness = value * 10
 }
 
-const setEffect = (id, settings) => {
+const setEffect = (key, id) => {
+  const settings = JSON.parse(localStorage[key])
   let query = `id=${id}`
   if (settings['accentColor'] != null) query += `&accentColor=${settings['accentColor']}`
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
@@ -163,8 +171,6 @@ const setSaturation = value => {
 
 const setSpeed = value => {
   buffer.speed = 4+value*(value+1)/2
-  console.log (4+value*(value+1)/2)
-  console.log (value)
 }
 function configUpdater () {
   if (Object.keys(buffer).length > 0) {
@@ -193,10 +199,10 @@ function configUpdater () {
       delete buffer.speed
     }
   }
-  setTimeout (configUpdater, 70);
+  setTimeout (configUpdater, 70)
 }
 
-function powerSwitch(){
+const powerSwitch = () => {
   if (power) {
     $.get("powerSwitch?power=0");
   }
@@ -206,13 +212,20 @@ function powerSwitch(){
   window.navigator.vibrate(10)
   power = !power;
 }
-let environment;
-const drawer = () => {
 
+const writeDefaultSettings = () => {
+  Object.entries(effects).forEach (([key, value]) => {
+    localStorage.setItem(key, JSON.stringify(value['settings']))
+  })
+}
+
+const initialization = () => {
+  if (localStorage.length === 0) writeDefaultSettings ()
   $.getJSON ('getEnvironment', data => {
     document.getElementById('brightnessSlider').value = data.brightness/10
     if (data.connected === false) showWifiCard()
     showEffects()
   })
 }
-drawer()
+showEffects()
+initialization()
