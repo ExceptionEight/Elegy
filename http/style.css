@@ -12,13 +12,12 @@ html, body {
 .mainContainer {
   width: 100%;
   height: 100%;
-  background-color: red;
+  background-color: white;
 }
 
 .effectsContainer {
   height: calc(100% - 60px);
   width: calc(100% - 30px);
-  background-color: green;
   margin: 0 auto;
   overflow: scroll;
 }
@@ -26,7 +25,6 @@ html, body {
 .indent {
   width: 100%;
   height: 50px;
-  background-color: blue;
 }
 
 .commonEffectContainer {
@@ -57,13 +55,11 @@ html, body {
 
 .settingsEffectContainer {
   width: 100%;
-  background-color: gold;
 }
 
 .effectSliderWrapper {
   width: 90%;
   height: 28px;
-  background-color: aqua;
   margin: 10 auto;
 }
 
@@ -113,7 +109,7 @@ html, body {
   -webkit-appearance: none;
   margin: 0;
   width: 100%;
-  height: 100%;8e5);
+  height: 100%;
   outline: none;
   border-style: solid;
   border-color: black;
@@ -133,11 +129,12 @@ html, body {
   width: 100%;
   height: 60px;
   display: flex;
-  background-color: pink;
+  border-top-style: solid;
+  border-top-width: 1px;
+  box-sizing: border-box;
 }
 
 .brightnessContainer {
-  background-color: yellow;
   width: calc(100% - 60px);
   height: 100%;
   float: left;
@@ -153,6 +150,7 @@ html, body {
   outline: none;
   border-style: solid;
   border-color: black;
+  /*border-color: #3c3c3c;*/
   border-radius: 20px;
   overflow: hidden;
 }
@@ -167,7 +165,6 @@ html, body {
 }
 
 .powerContainer {
-  background-color: violet;
   width: 60px;
   height: 100%;
   float: right;
@@ -176,9 +173,13 @@ html, body {
   align-items: center;
 }
 
-.powerButtonImage {
-  width: 30px;
-  height: 30px;
+.powerButton {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 3px;
+  border-color: black;
 }
 
 .wifiText1 {

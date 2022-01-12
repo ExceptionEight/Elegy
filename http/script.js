@@ -99,6 +99,10 @@ const showEffectSettings = (container, effectKey) => {
     slider.oninput = () => {
       setAccentColor(slider.value)
       data.accentColor = slider.value
+      if (data.saturation != null) {
+        const color = `hsl(${slider.value*1.41176}, 100%, 50%)`
+        document.getElementById('saturation').style.background = `linear-gradient(90deg, #fff,${color})`
+      }
     }
     slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
     slider.ontouchend = () => localStorage.setItem(effectKey, JSON.stringify(data))
@@ -112,9 +116,11 @@ const showEffectSettings = (container, effectKey) => {
     const slider = document.createElement('input')
     slider.className = 'saturationSlider'
     slider.type = 'range'
+    slider.id = 'saturation'
     slider.min = 1
     slider.max = 255
     slider.value = data.saturation
+    slider.style.background = `linear-gradient(90deg, #fff,hsl(${data.accentColor*1.41176}, 100%, 50%))`
     slider.oninput = () => {
       setSaturation(slider.value)
       data.saturation = slider.value
