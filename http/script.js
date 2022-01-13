@@ -252,6 +252,9 @@ const initialization = () => {
     document.getElementById('brightnessSlider').value = data.brightness/10
     if (data.connected === false) showWifiCard()
     showEffects()
+    selectedEffect.name = Object.keys(effects)[data.currentEffect-1]
+    selectedEffect.isSettingsActive = false
+    document.getElementById (Object.keys(effects)[data.currentEffect-1]).className = 'commonEffectContainer active'
   })
 }
 showEffects()
