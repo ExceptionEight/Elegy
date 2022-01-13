@@ -87,6 +87,26 @@ const showEffectSettings = (container, effectKey) => {
   const settingsEffectContainer = document.createElement('div')
   settingsEffectContainer.className = 'settingsEffectContainer'
   settingsEffectContainer.id = 'settingsEffectContainer'
+
+  if (data.activeColor != null) {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'colorpickCircleWrapper'
+    effects[effectKey]['colorScheme'].forEach((e, i) => {
+      const colorpickCircle = document.createElement('div')
+      colorpickCircle.className = data.activeColor !== i ? 'colorpickCircle' : 'colorpickCircle colorpickCircleSelected'
+      colorpickCircle.style.background = `linear-gradient(135deg, ${e[1]},${e[2]})`
+      colorpickCircle.onclick = () => {
+        setAccentColor(e[0])
+        data.activeColor = i
+        localStorage.setItem(effectKey, JSON.stringify(data))
+        wrapper.getElementsByClassName('colorpickCircleSelected')[0].className = 'colorpickCircle'
+        colorpickCircle.className = 'colorpickCircle colorpickCircleSelected'
+      }
+      wrapper.appendChild(colorpickCircle)
+    })
+    settingsEffectContainer.appendChild(wrapper)
+  }
+
   if (data.accentColor != null) {
     const sliderWrapper = document.createElement('div')
     sliderWrapper.className = 'effectSliderWrapper'
@@ -149,6 +169,7 @@ const showEffectSettings = (container, effectKey) => {
     sliderWrapper.appendChild(slider)
     settingsEffectContainer.appendChild(sliderWrapper)
   }
+
   container.appendChild(settingsEffectContainer)
 }
 
