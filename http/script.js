@@ -1,4 +1,5 @@
 let power = false;
+let scrollPosition;
 let buffer = {}
 let selectedEffect = {name: 'solid', isSettingsActive: false}
 
@@ -230,14 +231,48 @@ function configUpdater () {
 }
 
 const powerSwitch = () => {
-  if (power) {
-    $.get("powerSwitch?power=0");
+  if (!power) {
+    $.get("powerSwitch?power=0")
+    showPowerOffScreen()
   }
   else {
-    $.get("powerSwitch?power=1");
+    $.get("powerSwitch?power=1")
+    showPowerOnScreen()
   }
   window.navigator.vibrate(10)
-  power = !power;
+  power = !power
+}
+
+const setWhiteTheme = () => {
+  document.getElementById('mainContainer').style.backgroundColor = '#fff'
+  document.getElementById('controllCenter').style.backgroundColor = '#fff'
+  document.getElementById('controllCenter').style.borderColor = '#000'
+  document.getElementById('powerButton').style.borderColor = '#000'
+  document.getElementById('brightnessSlider').style.borderColor = '#000'
+  document.getElementById('brightnessSlider').style.backgroundColor = '#fff'
+  document.getElementById('brightnessSlider').style.setProperty('--sliderColor', '#000')
+}
+
+const setDarkTheme = () => {
+  document.getElementById('mainContainer').style.backgroundColor = '#222'
+  document.getElementById('controllCenter').style.backgroundColor = '#222'
+  document.getElementById('controllCenter').style.borderColor = '#bbb'
+  document.getElementById('powerButton').style.borderColor = '#bbb'
+  document.getElementById('brightnessSlider').style.borderColor = '#bbb'
+  document.getElementById('brightnessSlider').style.backgroundColor = '#222'
+  document.getElementById('brightnessSlider').style.setProperty('--sliderColor', '#bbb')
+}
+
+const showPowerOnScreen = () => {
+  setWhiteTheme()
+  document.getElementById('effectsContainer').style.display = 'block'
+  document.getElementById('mainContainer').scrollTop = scrollPosition
+}
+
+const showPowerOffScreen = () => {
+  setDarkTheme()
+  scrollPosition = document.getElementById('mainContainer').scrollTop
+  document.getElementById('effectsContainer').style.display = 'none'
 }
 
 const writeDefaultSettings = () => {
@@ -255,6 +290,11 @@ const initialization = () => {
     selectedEffect.name = Object.keys(effects)[data.currentEffect-1]
     selectedEffect.isSettingsActive = false
     document.getElementById (Object.keys(effects)[data.currentEffect-1]).className = 'commonEffectContainer active'
+    if (data.power === true) {
+      showPowerOnScreen()
+    } else {
+      showPowerOffScreen()
+    }
   })
 }
 showEffects()

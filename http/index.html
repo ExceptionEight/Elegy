@@ -5,17 +5,17 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div class="mainContainer">
+  <div class="mainContainer" id="mainContainer">
     <div class="effectsContainer" id="effectsContainer">
       <div class="indent"> </div>
     </div>
-    <div class="controllCenter">
-      <div class = "brightnessContainer">
-        <input type = "range" min="1" max = "25" value="10" class="brightnessSlider" id="brightnessSlider" oninput='setBrightness(this.value)'>
-      </div>
-      <div class = "powerContainer">
-        <div class="powerButton" onclick="powerSwitch();"> </div>
-      </div>
+  </div>
+  <div class="controllCenter" id="controllCenter">
+    <div class = "brightnessContainer">
+      <input type = "range" min="1" max = "25" value="10" class="brightnessSlider" id="brightnessSlider" oninput='setBrightness(this.value)'>
+    </div>
+    <div class = "powerContainer">
+      <div class="powerButton" id="powerButton" onclick="powerSwitch();"> </div>
     </div>
   </div>
 </body>
