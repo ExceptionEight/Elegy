@@ -1,13 +1,28 @@
 void powerSwitch() {
   if (server.arg("power")=="0") {
     device.power = false;
-    digitalWrite(D4, LOW);
-    FastLED.setBrightness(0);
+    effect.swapping = true;
+    buffer.current = effect.current;
+    buffer.step = effect.step;
+    buffer.saturation = effect.saturation;
+    buffer.accentColor = effect.accentColor;
+    buffer.speed = effect.speed;
+    effect.current = 0;
+    effect.step = 0;
+    //effect.accentColor = (WiFi.status() == WL_CONNECTED) ? 40 : 0;
+    //effect.saturation = (WiFi.status() == WL_CONNECTED) ? 255 : 255;
+    effect.speed = 100;
+    effect.swapping = false;
   }
   else {
     device.power = true;
-    digitalWrite (D4, HIGH);
-    FastLED.setBrightness(brightness);
+    effect.swapping = true;
+    effect.current = buffer.current;
+    effect.step = buffer.step;
+    effect.saturation = buffer.saturation;
+    effect.accentColor = buffer.accentColor;
+    effect.speed = buffer.speed;
+    effect.swapping = false;
   }
   server.send(200);
 }

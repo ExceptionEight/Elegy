@@ -25,9 +25,17 @@ struct {
   byte value = 128;
   uint step = 0;
   byte mode = 0;
-  byte current = 5;
+  byte current = 0;
   bool swapping = false;
 } effect;
+
+struct {
+  byte current = 0;
+  byte accentColor = 0;
+  byte speed = 0;
+  byte saturation = 0;
+  uint step = 0;
+} buffer;
 
 struct {
   unsigned long powerCycle;

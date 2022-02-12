@@ -1,6 +1,6 @@
 void networkInit() {
-  String ssid;// = "TP-LINK_kapallink";
-  String password;// = "1P6A1P2A1969GenA77O98D08D";
+  String ssid;
+  String password;
   for (int i = 0; i < 32; i++) {
     ssid += char(EEPROM.read(i));
   }

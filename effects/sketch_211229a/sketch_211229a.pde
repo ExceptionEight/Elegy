@@ -5,14 +5,34 @@ void setup () {
   size (800, 200, P2D);
   colorMode(HSB);
   frameRate (75);
-  waveInit ();
+  //waveInit ();
 }
 
 void draw () {
   //pulse ();
   //rainbow ();
-  wave ();
+  //wave ();
+  lakhta();
   delay (80);
+}
+
+void lakhta () {
+  println (step);
+  background (255,255,0);
+  if (step == 0) {
+    for (int i = 0; i < 20; i+=4) {
+      leds[i][0] = 115;
+      leds[i][1] = 255;
+      leds[i][2] = 255;
+      drawLed (i);
+    }
+  } else if (step <= 5) {
+    
+  } else {
+  step = 0;
+  return;
+  }
+  step++;
 }
 
 void waveInit () {
