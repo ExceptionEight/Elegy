@@ -65,7 +65,8 @@ const showEffects = () => {
     effectName.innerHTML = value['name']
 
     effectName.onclick = () => {
-      setEffect (key, value['id'])
+      setEffect (key)
+      localStorage.setItem ('lastEffectKey', key)
       document.getElementById(selectedEffect.name).classList.remove ('active')
       commonEffectContainer.className = 'commonEffectContainer active'
       if (selectedEffect.name == key && !selectedEffect.isSettingsActive) {
@@ -179,9 +180,9 @@ const setBrightness = value => {
   buffer.brightness = value * 10
 }
 
-const setEffect = (key, id) => {
+const setEffect = key => {
   const settings = JSON.parse(localStorage[key])
-  let query = `id=${id}`
+  let query = `id=${effects[key].id}`
   if (settings['accentColor'] != null) query += `&accentColor=${settings['accentColor']}`
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
   if (settings['speed'] != null) query += `&speed=${settings['speed']}`
@@ -231,16 +232,16 @@ function configUpdater () {
 }
 
 const powerSwitch = () => {
+  power = !power
   if (!power) {
     $.get("powerSwitch?power=0")
     showPowerOffScreen()
   }
   else {
-    $.get("powerSwitch?power=1")
+    setEffect(localStorage.lastEffectKey)
     showPowerOnScreen()
   }
   window.navigator.vibrate(10)
-  power = !power
 }
 
 const setWhiteTheme = () => {
@@ -279,6 +280,7 @@ const writeDefaultSettings = () => {
   Object.entries(effects).forEach (([key, value]) => {
     localStorage.setItem(key, JSON.stringify(value['settings']))
   })
+  localStorage.setItem ('lastEffectKey', 'solid')
 }
 
 const initialization = () => {
@@ -287,10 +289,18 @@ const initialization = () => {
     document.getElementById('brightnessSlider').value = data.brightness/10
     if (data.connected === false) showWifiCard()
     showEffects()
-    selectedEffect.name = Object.keys(effects)[data.currentEffect-1]
-    selectedEffect.isSettingsActive = false
-    document.getElementById (Object.keys(effects)[data.currentEffect-1]).className = 'commonEffectContainer active'
-    if (data.power === true) {
+    power = data.power
+    if (power) {
+      selectedEffect.name = Object.keys(effects)[data.currentEffect-1]
+      selectedEffect.isSettingsActive = false
+      document.getElementById (Object.keys(effects)[data.currentEffect-1]).className = 'commonEffectContainer active'
+    } else {
+      selectedEffect.name = localStorage.lastEffectKey
+      selectedEffect.isSettingsActive = false
+      document.getElementById (localStorage.lastEffectKey).className = 'commonEffectContainer active'
+    }
+
+    if (power === true) {
       showPowerOnScreen()
     } else {
       showPowerOffScreen()

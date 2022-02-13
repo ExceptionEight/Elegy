@@ -35,11 +35,12 @@ struct {
   byte speed = 0;
   byte saturation = 0;
   uint step = 0;
+  CRGB frame[NUM_LEDS];
 } buffer;
 
 struct {
   unsigned long powerCycle;
-  bool power = true;
+  bool power = false;
 } device;
 
 struct {

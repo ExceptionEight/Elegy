@@ -1,12 +1,11 @@
 void powerOff () {
-  if (effect.step == 1) {
+  effect.step = (effect.step == 16) ? 0 : effect.step;
+  if (effect.step <= 1) {
     for (int i = 0; i < NUM_LEDS; i+=5) {
       leds[i] = CHSV((WiFi.status() == WL_CONNECTED) ? 35 : 0, (WiFi.status() == WL_CONNECTED) ? 220 : 255, 255);
     }
-  } else if (effect.step <= 18) {
-    FastLED.clear();
   } else {
-    effect.step = 0;
+    FastLED.clear();
   }
   FastLED.show();
   effect.step++;

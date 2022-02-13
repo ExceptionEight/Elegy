@@ -4,33 +4,38 @@ void powerSwitch() {
     effect.swapping = true;
     buffer.current = effect.current;
     buffer.step = effect.step;
-    buffer.saturation = effect.saturation;
-    buffer.accentColor = effect.accentColor;
     buffer.speed = effect.speed;
+    memcpy (buffer.frame, leds, sizeof (buffer.frame));
     effect.current = 0;
     effect.step = 0;
-    //effect.accentColor = (WiFi.status() == WL_CONNECTED) ? 40 : 0;
-    //effect.saturation = (WiFi.status() == WL_CONNECTED) ? 255 : 255;
     effect.speed = 100;
+    FastLED.clear();
     effect.swapping = false;
   }
   else {
-    device.power = true;
-    effect.swapping = true;
-    effect.current = buffer.current;
-    effect.step = buffer.step;
-    effect.saturation = buffer.saturation;
-    effect.accentColor = buffer.accentColor;
-    effect.speed = buffer.speed;
-    effect.swapping = false;
+    
   }
   server.send(200);
 }
 
 void setEffect () {
   byte id = server.arg("id").toInt();
+  if (device.power == false && buffer.current == id) {
+    device.power = true;
+    effect.swapping = true;
+    effect.current = buffer.current;
+    effect.step = buffer.step;
+    effect.speed = buffer.speed;
+    memcpy (leds, buffer.frame, sizeof (leds));
+    effect.swapping = false;
+    server.send(200);
+    Serial.println ("Fu");
+    return;
+  }
+
   if (effect.current != id)
   {
+    device.power = true;
     effect.swapping = true;
     effect.current = id;
     effect.step = 0;
@@ -92,6 +97,8 @@ void getEnvironment () {
   itoa (brightness, response + strlen(response), DEC);
   strcat (response, ",\"currentEffect\":");
   itoa (effect.current, response + strlen(response), DEC);
+  strcat (response, ",\"currentBufferEffect\":");
+  itoa (buffer.current, response + strlen(response), DEC);
   strcat (response, ",\"uptime\":");
   itoa (uptime.current, response + strlen(response), DEC);
 
