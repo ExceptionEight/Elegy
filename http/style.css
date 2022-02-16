@@ -256,7 +256,6 @@ html, body {
 
 .wifiInput::placeholder {
   color: grey;
-
 }
 
 .saveWifiConfigButton {
@@ -277,4 +276,42 @@ html, body {
 
 .wifiButtonWrapper {
   height: 50px;
+}
+
+.powerOffBackgroundContainer {
+  width: 100%;
+  background-color: #9198e5;
+  background-image: url('lakhta.png');
+  background-size: 100% 100%;
+  padding-top: 177.77%
+}
+
+.powerOffBackgroundContainer::after {
+  content: '';
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: var(--zIndex);
+  background-image: url('blinks.png');
+  background-size: 100%;
+}
+
+.lakhtaImage {
+  width: 100%;
+  height: 100%;
+  background-image: url('lakhta.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.lakhtaBlinksImage {
+  width: 100%;
+  height: 100%;
+  background-image: url('blinks.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }

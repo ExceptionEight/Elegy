@@ -2,6 +2,7 @@ let power = false;
 let scrollPosition;
 let buffer = {}
 let selectedEffect = {name: 'solid', isSettingsActive: false}
+let blinks = false
 
 const showWifiCard = () => {
   const commonEffectContainer = document.createElement('div')
@@ -236,10 +237,12 @@ const powerSwitch = () => {
   if (!power) {
     $.get("powerSwitch?power=0")
     showPowerOffScreen()
+    if (blinks !== false) showBlinks()
   }
   else {
     setEffect(localStorage.lastEffectKey)
     showPowerOnScreen()
+    hideBlinks (false)
   }
   window.navigator.vibrate(10)
 }
@@ -266,6 +269,7 @@ const setDarkTheme = () => {
 
 const showPowerOnScreen = () => {
   setWhiteTheme()
+  document.getElementById('lakhtaImage').style.display = 'none'
   document.getElementById('effectsContainer').style.display = 'block'
   document.getElementById('mainContainer').scrollTop = scrollPosition
 }
@@ -274,6 +278,8 @@ const showPowerOffScreen = () => {
   setDarkTheme()
   scrollPosition = document.getElementById('mainContainer').scrollTop
   document.getElementById('effectsContainer').style.display = 'none'
+  document.getElementById('lakhtaImage').style.display = 'block'
+  //document.getElementById('powerOffBackgroundImage').style.display = 'block'
 }
 
 const writeDefaultSettings = () => {
@@ -309,3 +315,26 @@ const initialization = () => {
 }
 showEffects()
 initialization()
+
+let blinksTimer
+
+const showBlinks = () => {
+  document.getElementById('lakhtaBlinksImage').style.display = 'block'
+  blinksTimer = setTimeout(hideBlinks, 200, 1500)
+}
+
+const hideBlinks = nextBlink => {
+  document.getElementById('lakhtaBlinksImage').style.display = 'none'
+  clearTimeout(blinksTimer)
+  blinksTimer = nextBlink !== false ? setTimeout(showBlinks, nextBlink) : null
+}
+
+const switchBlinksMode = () => {
+  blinks = !blinks
+  if (blinks) {
+    showBlinks()
+    //$.get blinks=1;
+  } else {
+    hideBlinks (false)
+  }
+}
