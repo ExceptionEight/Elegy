@@ -1,8 +1,9 @@
-let power = false;
-let scrollPosition;
+let power = false
+let scrollPosition
 let buffer = {}
 let selectedEffect = {name: 'solid', isSettingsActive: false}
 let blinks = false
+let blinksTimer
 
 const showWifiCard = () => {
   const commonEffectContainer = document.createElement('div')
@@ -242,6 +243,7 @@ const powerSwitch = () => {
   else {
     setEffect(localStorage.lastEffectKey)
     showPowerOnScreen()
+    clearTimeout(blinksTimer)
     hideBlinks (false)
   }
   window.navigator.vibrate(10)
@@ -279,7 +281,6 @@ const showPowerOffScreen = () => {
   scrollPosition = document.getElementById('mainContainer').scrollTop
   document.getElementById('effectsContainer').style.display = 'none'
   document.getElementById('lakhtaImage').style.display = 'block'
-  //document.getElementById('powerOffBackgroundImage').style.display = 'block'
 }
 
 const writeDefaultSettings = () => {
@@ -294,29 +295,24 @@ const initialization = () => {
   $.getJSON ('getEnvironment', data => {
     document.getElementById('brightnessSlider').value = data.brightness/10
     if (data.connected === false) showWifiCard()
+    blinks = data['nextBlink'] === false ? false : true
     showEffects()
     power = data.power
     if (power) {
       selectedEffect.name = Object.keys(effects)[data.currentEffect-1]
       selectedEffect.isSettingsActive = false
       document.getElementById (Object.keys(effects)[data.currentEffect-1]).className = 'commonEffectContainer active'
+      showPowerOnScreen()
     } else {
       selectedEffect.name = localStorage.lastEffectKey
       selectedEffect.isSettingsActive = false
       document.getElementById (localStorage.lastEffectKey).className = 'commonEffectContainer active'
-    }
-
-    if (power === true) {
-      showPowerOnScreen()
-    } else {
       showPowerOffScreen()
+      hideBlinks(data['nextBlink'])
     }
   })
 }
-showEffects()
 initialization()
-
-let blinksTimer
 
 const showBlinks = () => {
   document.getElementById('lakhtaBlinksImage').style.display = 'block'
@@ -325,12 +321,12 @@ const showBlinks = () => {
 
 const hideBlinks = nextBlink => {
   document.getElementById('lakhtaBlinksImage').style.display = 'none'
-  clearTimeout(blinksTimer)
   blinksTimer = nextBlink !== false ? setTimeout(showBlinks, nextBlink) : null
 }
 
 const switchBlinksMode = () => {
   blinks = !blinks
+  clearTimeout(blinksTimer)
   if (blinks) {
     showBlinks()
     //$.get blinks=1;
