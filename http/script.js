@@ -316,7 +316,7 @@ initialization()
 
 const showBlinks = () => {
   document.getElementById('lakhtaBlinksImage').style.display = 'block'
-  blinksTimer = setTimeout(hideBlinks, 200, 1500)
+  blinksTimer = setTimeout(hideBlinks, 200, 1400)
 }
 
 const hideBlinks = nextBlink => {

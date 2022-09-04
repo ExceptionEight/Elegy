@@ -3,13 +3,14 @@
 #include <FTPServer.h>
 
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include <FastLED.h>
 #include <EEPROM.h>
 #define NUM_LEDS 60
 #define PIN 5
-ESP8266WebServer server(80);
+AsyncWebServer server(80);
 FTPServer ftp(LittleFS);
 
 CRGB leds[NUM_LEDS];
@@ -62,28 +63,16 @@ void setup()
   FastLED.addLeds<WS2812, PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(10);
   Serial.begin(115200);
-  //SPIFFS.begin();
   LittleFS.begin();
   server.begin();
   ftp.begin("admin", "admin");
   networkInit();
   incrementPowerCycle ();
-  server.on("/powerSwitch", powerSwitch);
-  server.on("/setBrightness", setBrightness);
-  server.on("/setAccentColor", setAccentColor);
-  server.on("/setSaturation", setSaturation);
-  server.on("/setSpeed", setSpeed);
-  server.on("/setEffect", setEffect);
-  server.on("/setWifi", setWifi);
-  server.on("/getEnvironment", getEnvironment);
-  server.onNotFound([](){
-    if (!handleFileRead(server.uri()))
-    server.send (404, "text/plain", "DURILKA");
-  });
+  initWebServerFunctions();
+  server.begin();
 }
 
 void loop() {
-  server.handleClient();
   ftp.handleFTP();
   tickEffect();
   uptimeSaver();
