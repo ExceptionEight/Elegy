@@ -24,6 +24,7 @@ struct {
   byte interval = 0;
   byte saturation = 255;
   byte value = 128;
+  byte offset = 0;
   uint step = 0;
   byte mode = 0;
   byte current = 0;

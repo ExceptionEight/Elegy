@@ -126,9 +126,9 @@ void rainbow () {
 
 void wave () {
   leds[0] = CHSV (effect.accentColor, 255, 255);
-  if (effect.step < 31) {
+  if (effect.step <= effect.offset) {
     effect.accentColor++;
-  } else if (effect.step < 61) {
+  } else if (effect.step <= effect.offset*2) {
     effect.accentColor--;
   } else {
     effect.step = 0;

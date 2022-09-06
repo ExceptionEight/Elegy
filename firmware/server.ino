@@ -75,6 +75,15 @@ void initWebServerFunctions() {
     request->send(200);
   });
 
+  server.on("/setColorRange", HTTP_GET, [](AsyncWebServerRequest *request){
+    effect.swapping = true;
+    effect.step = 0;
+    effect.accentColor = request->getParam("accentColor")->value().toInt();
+    effect.offset = request->getParam("offset")->value().toInt();
+    effect.swapping = false;
+    request->send(200);
+  });
+
   server.on("/setWifi", HTTP_GET, [](AsyncWebServerRequest *request){
     if (request->getParam("ssid")->value().length() <= 32 && request->getParam("password")->value().length() <=64) {
       writeWifiSettings (request->getParam("ssid")->value(), request->getParam("password")->value());
