@@ -20,7 +20,7 @@ byte brightness = 100;
 //unsigned char matrix [1][29][2];
 struct {
   byte accentColor = 15;
-  byte speed = 128;
+  byte speed = 10;
   byte interval = 0;
   byte saturation = 255;
   byte value = 128;
@@ -43,6 +43,7 @@ struct {
 struct {
   unsigned long powerCycle;
   bool power = false;
+  bool blinks = true;
 } device;
 
 struct {

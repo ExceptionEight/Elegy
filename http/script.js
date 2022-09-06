@@ -236,7 +236,7 @@ function configUpdater () {
 const powerSwitch = () => {
   power = !power
   if (!power) {
-    $.get("powerSwitch?power=0")
+    $.get(`powerOff?blinks=${blinks !== false ? 1 : -1}`)
     showPowerOffScreen()
     if (blinks !== false) showBlinks()
   }
@@ -295,7 +295,7 @@ const initialization = () => {
   $.getJSON ('getEnvironment', data => {
     document.getElementById('brightnessSlider').value = data.brightness/10
     if (data.connected === false) showWifiCard()
-    blinks = data['nextBlink'] === false ? false : true
+    blinks = data['nextBlink'] === -1 ? false : true
     showEffects()
     power = data.power
     if (power) {
@@ -308,7 +308,8 @@ const initialization = () => {
       selectedEffect.isSettingsActive = false
       document.getElementById (localStorage.lastEffectKey).className = 'commonEffectContainer active'
       showPowerOffScreen()
-      hideBlinks(data['nextBlink'])
+      if (blinks) hideBlinks(data['nextBlink'])
+      else hideBlinks (false)
     }
   })
 }
@@ -316,7 +317,7 @@ initialization()
 
 const showBlinks = () => {
   document.getElementById('lakhtaBlinksImage').style.display = 'block'
-  blinksTimer = setTimeout(hideBlinks, 200, 1400)
+  blinksTimer = setTimeout(hideBlinks, 200, 1798)
 }
 
 const hideBlinks = nextBlink => {
@@ -329,8 +330,9 @@ const switchBlinksMode = () => {
   clearTimeout(blinksTimer)
   if (blinks) {
     showBlinks()
-    //$.get blinks=1;
+    $.get('powerOff?blinks=1')
   } else {
+    $.get('powerOff?blinks=-1')
     hideBlinks (false)
   }
 }

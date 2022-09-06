@@ -1,6 +1,6 @@
 void powerOff () {
-  effect.step = (effect.step == 16) ? 0 : effect.step;
-  if (effect.step <= 1) {
+  effect.step = (effect.step == 200) ? 0 : effect.step;
+  if (effect.step <= 20) {
     for (int i = 0; i < NUM_LEDS; i+=5) {
       leds[i] = CHSV((WiFi.status() == WL_CONNECTED) ? 35 : 0, (WiFi.status() == WL_CONNECTED) ? 220 : 255, 255);
     }

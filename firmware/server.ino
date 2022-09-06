@@ -1,18 +1,25 @@
 void initWebServerFunctions() {
-  server.on("/powerSwitch", HTTP_GET, [](AsyncWebServerRequest *request){
-    if (request->getParam("power")->value()=="0") {
-      device.power = false;
-      effect.swapping = true;
+  server.on("/powerOff", HTTP_GET, [](AsyncWebServerRequest *request){
+    device.power = false;
+    effect.swapping = true;
+    if (request->getParam("blinks")->value().toInt() == -1) {
+      device.blinks = false;
+    } else {
+      device.blinks = true;
+      effect.swapping = false;
+    } 
+    if (effect.current != 0) {
       buffer.current = effect.current;
       buffer.step = effect.step;
       buffer.speed = effect.speed;
       memcpy (buffer.frame, leds, sizeof (buffer.frame));
-      effect.current = 0;
-      effect.step = 0;
-      effect.speed = 100;
-      FastLED.clear();
-      effect.swapping = false;
     }
+      
+    effect.current = 0;
+    effect.step = 0;
+    effect.speed = 10;
+    FastLED.clear();
+    FastLED.show();
     request->send(200);
   });
 
@@ -95,6 +102,8 @@ void initWebServerFunctions() {
   char response[230] = "";
   strcat (response, "{\"power\":");
   strcat (response, device.power ? "true" : "false");
+  strcat (response, ",\"nextBlink\":");
+  itoa ((!device.power && device.blinks) ? (200 - effect.step) * 10 : -1, response + strlen(response), DEC);
   strcat (response, ",\"connected\":");
   strcat (response, (WiFi.status() == WL_CONNECTED) ? "true" : "false");
   strcat (response, ",\"brightness\":");
