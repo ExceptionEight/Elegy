@@ -21,6 +21,9 @@ void tickEffect () {
     case 5:
       wave ();
       break;
+    case 6:
+      segments ();
+      break;
     }
   }
 }

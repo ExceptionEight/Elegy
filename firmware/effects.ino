@@ -138,6 +138,15 @@ void wave () {
   FastLED.show();
 }
 
+void segments () {
+  byte segment = random (5);
+  byte color = effect.accentColor + random (effect.offset+1);
+  for (int i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(segment*(NUM_LEDS/5))] = CHSV(color, 255, 255);
+  }
+  FastLED.show();
+}
+
 void shiftLeds (byte amount) {
   for (int i = NUM_LEDS-1; i > 0; i--) {
     leds[i] = leds[i-1];
