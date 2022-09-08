@@ -98,9 +98,9 @@ const showEffectSettings = (container, effectKey) => {
     effects[effectKey]['colorScheme'].forEach((e, i) => {
       const colorpickCircle = document.createElement('div')
       colorpickCircle.className = data.activeColor !== i ? 'colorpickCircle' : 'colorpickCircle colorpickCircleSelected'
-      colorpickCircle.style.background = `linear-gradient(135deg, ${e[1]},${e[2]})`
+      colorpickCircle.style.background = `linear-gradient(135deg, ${e[2]},${e[3]})`
       colorpickCircle.onclick = () => {
-        setAccentColor(e[0])
+        setColorRange(e[0], e[1])
         data.activeColor = i
         localStorage.setItem(effectKey, JSON.stringify(data))
         wrapper.getElementsByClassName('colorpickCircleSelected')[0].className = 'colorpickCircle'
@@ -189,6 +189,7 @@ const setEffect = key => {
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
   if (settings['speed'] != null) query += `&speed=${settings['speed']}`
   if (settings['interval'] != null) query += `&interval=${settings['interval']}`
+  if (settings['activeColor'] != null) query += `&accentColor=${effects[key].colorScheme[settings['activeColor'][0]]}&offset=${effects[key].colorScheme[settings['activeColor'][1]]}`
   buffer.effect = query
 }
 
@@ -203,6 +204,11 @@ const setSaturation = value => {
 const setSpeed = value => {
   buffer.speed = 4+value*(value+1)/2
 }
+
+const setColorRange = (accentColor, offset) => {
+  buffer.colorRange = {accentColor: accentColor, offset: offset}
+}
+
 function configUpdater () {
   if (Object.keys(buffer).length > 0) {
     if (buffer.effect != null) {
@@ -228,6 +234,10 @@ function configUpdater () {
     if (buffer.speed != null) {
       $.get(`setSpeed?value=${buffer.speed}`)
       delete buffer.speed
+    }
+
+    if (buffer.colorRange != null) {
+      $.get(`setColorRange?accentColor=${buffer.colorRange.accentColor}&offset=${buffer.colorRange.offset}`)
     }
   }
   setTimeout (configUpdater, 70)
