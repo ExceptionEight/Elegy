@@ -189,7 +189,7 @@ const setEffect = key => {
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
   if (settings['speed'] != null) query += `&speed=${settings['speed']}`
   if (settings['interval'] != null) query += `&interval=${settings['interval']}`
-  if (settings['activeColor'] != null) query += `&accentColor=${effects[key].colorScheme[settings['activeColor'][0]]}&offset=${effects[key].colorScheme[settings['activeColor'][1]]}`
+  if (settings['activeColor'] != null) query += `&accentColor=${effects[key].colorScheme[settings.activeColor][0]}&offset=${effects[key].colorScheme[settings.activeColor][1]}`
   buffer.effect = query
 }
 
@@ -238,6 +238,7 @@ function configUpdater () {
 
     if (buffer.colorRange != null) {
       $.get(`setColorRange?accentColor=${buffer.colorRange.accentColor}&offset=${buffer.colorRange.offset}`)
+      delete buffer.colorRange
     }
   }
   setTimeout (configUpdater, 70)

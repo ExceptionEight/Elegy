@@ -55,6 +55,7 @@ void initWebServerFunctions() {
         break;
       case 5:
         effect.accentColor = request->getParam("accentColor")->value().toInt();
+        effect.offset = request->getParam("offset")->value().toInt();
         break;
       case 6:
         effect.accentColor = request->getParam("accentColor")->value().toInt();
