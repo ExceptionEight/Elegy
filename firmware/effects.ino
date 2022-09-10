@@ -1,3 +1,5 @@
+
+
 void powerOff () {
   effect.step = (effect.step == 200) ? 0 : effect.step;
   if (effect.step <= 20) {
@@ -138,13 +140,70 @@ void wave () {
   FastLED.show();
 }
 
-void segments () {
-  byte segment = random (5);
-  byte color = effect.accentColor + random (effect.offset+1);
-  for (int i = 0; i < NUM_LEDS/5; i++) {
-    leds[i+(segment*(NUM_LEDS/5))] = CHSV(color, 255, 255);
+void segmentsLoading () {
+  if (effect.step == 0) {
+    buffer.speed = effect.speed;
+    effect.speed = 15;
   }
+
+  if (effect.step < 192) {
+    for (byte i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(effect.queue[0]*(NUM_LEDS/5))] = CHSV(effect.colorQueue[0], 255, (byte)effect.step+63);
+    }
+  }
+  if (effect.step > 63 && effect.step < 256) {
+    for (byte i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(effect.queue[1]*(NUM_LEDS/5))] = CHSV(effect.colorQueue[1], 255, (byte)effect.step-1);
+    }
+  }
+  if (effect.step > 127 && effect.step < 320) {
+    for (byte i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(effect.queue[2]*(NUM_LEDS/5))] = CHSV(effect.colorQueue[2], 255, (byte)effect.step-65);
+    }
+  }
+  if (effect.step > 191 && effect.step < 384) {
+    for (byte i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(effect.queue[3]*(NUM_LEDS/5))] = CHSV(effect.colorQueue[3], 255, (byte)effect.step-129);
+    }
+  }
+  if (effect.step > 255 && effect.step < 448) {
+    for (byte i = 0; i < NUM_LEDS/5; i++) {
+    leds[i+(effect.queue[4]*(NUM_LEDS/5))] = CHSV(effect.colorQueue[4], 255, (byte)effect.step-193);
+    }
+  }
+  effect.step++;
+  effect.value++;
+  if (effect.step == 448) {
+    effect.step = 0;
+    effect.mode = 1;
+    effect.speed = buffer.speed;
+    segments = segmentsLoaded;
+  }
+
   FastLED.show();
+}
+
+void segmentsLoaded () {
+  if (effect.step % 70 == 0) {
+    effect.step = 0;
+    byte segment = random (5);
+    byte color = effect.accentColor + random (effect.offset+1);
+    for (int i = 0; i < NUM_LEDS/5; i++) {
+      leds[i+(segment*(NUM_LEDS/5))] = CHSV(color, 255, 255);
+    }
+    FastLED.show();
+  }
+  effect.step++;
+}
+
+void segmentsFill () {
+  for (byte i = 0; i < 5; i++) {
+    byte color = effect.accentColor + random (effect.offset+1);
+    for (int j = 0; j < NUM_LEDS/5; j++) {
+      leds[j+(i*(NUM_LEDS/5))] = CHSV(color, 255, 255);
+    }
+    FastLED.show();
+  }
 }
 
 void shiftLeds (byte amount) {

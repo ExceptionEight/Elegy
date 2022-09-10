@@ -58,8 +58,15 @@ void initWebServerFunctions() {
         effect.offset = request->getParam("offset")->value().toInt();
         break;
       case 6:
+        segments = segmentsLoading;
+        arrayShuffle (effect.queue);
+        FastLED.clear();
         effect.accentColor = request->getParam("accentColor")->value().toInt();
         effect.offset = request->getParam("offset")->value().toInt();
+
+        for (byte i = 0; i < 5; i++) {
+          effect.colorQueue[i] = effect.accentColor + random (effect.offset+1);
+        }
     }
     effect.swapping = false;
   }
@@ -88,9 +95,17 @@ void initWebServerFunctions() {
 
   server.on("/setColorRange", HTTP_GET, [](AsyncWebServerRequest *request){
     effect.swapping = true;
-    effect.step = 0;
     effect.accentColor = request->getParam("accentColor")->value().toInt();
     effect.offset = request->getParam("offset")->value().toInt();
+    switch (effect.current) {
+      case 5:
+        effect.step = 0;
+        break;
+      case 6:
+        if (effect.mode == 1) segmentsFill();
+        break;
+    }
+    
     effect.swapping = false;
     request->send(200);
   });

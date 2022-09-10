@@ -28,6 +28,8 @@ struct {
   uint step = 0;
   byte mode = 0;
   byte current = 0;
+  byte queue[5] = {0, 1, 2, 3, 4}; //using for segments loading animation
+  byte colorQueue[5];
   bool swapping = false;
 } effect;
 
@@ -53,6 +55,17 @@ struct {
   unsigned long timer = 0;
   unsigned long lastWrite = 0;
 } uptime;
+
+void (*segments) ();
+
+void arrayShuffle (byte array[]) {
+  for (byte i = sizeof(array)/sizeof(byte); i > 0; i--) {
+    byte j = random (i+1);
+    byte temp = array[j];
+    array[j] = array[i];
+    array[i] = temp;
+  }
+}
 
 void setup()
 {
@@ -88,6 +101,9 @@ void loop() {
     }
     if (data == 201) {
       shiftLeds (1);
+    }
+    if (data == 202) {
+      Serial.println (effect.step);
     }
   }
 }

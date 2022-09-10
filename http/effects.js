@@ -54,5 +54,22 @@ const effects = {
       speed: 128,
       activeColor: 0
     }
+  },
+  'segments': {
+    id: 6,
+    name: 'Сегменты',
+    colorScheme: [
+      [115, 30, '#00ffaa', '#00c8ff'],
+      [0, 30, '#ff0000', '#ffb300'],
+      [200, 30, '#ff00ee', '#ff0077'],
+      [220, 30, '#ff00b3', '#ff0040'],
+      [80, 10, '#00ff00', '#00ffd5'],
+      [145, 10, '#0022ff', '#8400ff'],
+      [170, 10, '#8400ff', '#ae00ff']
+    ],
+    settings: {
+      speed: 128,
+      activeColor: 0
+    }
   }
 }
