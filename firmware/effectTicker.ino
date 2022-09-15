@@ -24,6 +24,9 @@ void tickEffect () {
     case 6:
       segments ();
       break;
+    case 7:
+      stars ();
+      break;
     }
   }
 }

@@ -206,6 +206,17 @@ void segmentsFill () {
   }
 }
 
+void stars () {
+  if (random8 (10) == 0) {
+    byte amount = random8 (3);
+    for (int i = 0; i < amount; i++) {
+      leds[random16(NUM_LEDS)] = CHSV(effect.accentColor, effect.saturation, 255);
+    }
+  }
+  fadeToBlackBy (leds, NUM_LEDS, 1);
+  FastLED.show();
+}
+
 void shiftLeds (byte amount) {
   for (int i = NUM_LEDS-1; i > 0; i--) {
     leds[i] = leds[i-1];

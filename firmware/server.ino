@@ -67,6 +67,8 @@ void initWebServerFunctions() {
         for (byte i = 0; i < 5; i++) {
           effect.colorQueue[i] = effect.accentColor + random (effect.offset+1);
         }
+      case 7:
+        effect.speed = 15;
     }
     effect.swapping = false;
   }
