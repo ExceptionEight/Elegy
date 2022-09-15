@@ -20,22 +20,20 @@ void solidColor () {
     FastLED.show();
 }
 
-void heartbeat() {
-  if (effect.mode == 0) {
-    if (random(5) == 0) {
-      effect.mode = 1;
+void heartbeatPause() {
+  if (effect.mode == 0 && effect.step >= effect.interval) {
+    effect.step = 0;
+    if (random8(5) == 0) {
+      heartbeat = heartbeatPattern1;
     } else {
-      effect.mode = 2;
+      heartbeat = heartbeatPattern2;
     }
-  }
-  if (effect.mode == 1) {
-    heartbeat1 ();
-  } else if (effect.mode == 2) {
-    heartbeat2 ();
+  } else {
+    effect.step++;
   }
 }
 
-void heartbeat1 () {
+void heartbeatPattern1 () {
   if (effect.step < 60) {
 
   } else if (effect.step < 66) {
@@ -62,13 +60,13 @@ void heartbeat1 () {
   }
      else {
     effect.step = 0;
-    effect.mode = 0;
+    heartbeat = heartbeatPause;
   }
   FastLED.show();
   effect.step++;
 }
 
-void heartbeat2 () {
+void heartbeatPattern2 () {
   if (effect.step < 60) {
 
   } else if (effect.step < 70) {
@@ -91,7 +89,7 @@ void heartbeat2 () {
     }
   } else {
     effect.step = 0;
-    effect.mode = 0;
+    heartbeat = heartbeatPause;
   }
   FastLED.show();
   effect.step++;

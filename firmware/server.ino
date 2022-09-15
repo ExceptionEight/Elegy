@@ -50,8 +50,14 @@ void initWebServerFunctions() {
         effect.accentColor = request->getParam("accentColor")->value().toInt();
         break;
       case 2:
+        heartbeat = heartbeatPause;
+        FastLED.clear();
         effect.accentColor = request->getParam("accentColor")->value().toInt();
+        effect.saturation = request->getParam("saturation")->value().toInt();
+        effect.interval = request->getParam("speed")->value().toInt();
         effect.value = 128;
+        effect.speed = 15;
+        fill_solid (leds, NUM_LEDS, CHSV(effect.accentColor, effect.saturation, effect.value));
         break;
       case 5:
         effect.accentColor = request->getParam("accentColor")->value().toInt();
@@ -91,7 +97,14 @@ void initWebServerFunctions() {
   });
 
   server.on("/setSpeed", HTTP_GET, [](AsyncWebServerRequest *request){
-    effect.speed = request->getParam("value")->value().toInt();
+    switch (effect.current) {
+      case 2:
+        effect.interval = request->getParam("value")->value().toInt();
+        break;
+      default:
+        effect.speed = request->getParam("value")->value().toInt();
+        break;
+    }
     request->send(200);
   });
 
