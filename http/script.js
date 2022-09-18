@@ -161,11 +161,15 @@ const showEffectSettings = (container, effectKey) => {
     const slider = document.createElement('input')
     slider.className = 'speedSlider'
     slider.type = 'range'
-    slider.min = 1
-    slider.max = 15
+    slider.min = effects[effectKey]['speedParameters'][0]
+    slider.max = effects[effectKey]['speedParameters'][1]
     slider.value = data.speed
     slider.oninput = () => {
-      setSpeed(Number(slider.value))
+      let result = effects[effectKey]['speedParameters'][5] === true ? Number(slider.value)*(Number(slider.value)+1)/2 : Number(slider.value)
+      result += effects[effectKey]['speedParameters'][2]
+      result = Math.floor (result * effects[effectKey]['speedParameters'][3])
+      result = effects[effectKey]['speedParameters'][4] !== false ? effects[effectKey]['speedParameters'][4] - result : result
+      setSpeed(result)
       data.speed = slider.value
     }
     slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
@@ -202,7 +206,7 @@ const setSaturation = value => {
 }
 
 const setSpeed = value => {
-  buffer.speed = 4+value*(value+1)/2
+  buffer.speed = value
 }
 
 const setColorRange = (accentColor, offset) => {

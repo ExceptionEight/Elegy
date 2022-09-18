@@ -3,29 +3,39 @@ const effects = {
     id: 1,
     name: 'Монотонный',
     settings: {
-      accentColor: 0,
+      accentColor: 115,
       saturation: 255
     }
   },
   'pulse': {
     id: 2,
     name: 'Кокоро',
+    speedParameters: [
+      1, //min
+      16, //max
+      0, //add to result value (100 for e.g.) | first step
+      1.875, //multiply result to (2 or 2.718 for e.g.) | second step
+      false, //substract from (false or number) | last step
+      true //is triangular number (true) or (false) for raw
+    ],
     settings: {
-      accentColor: 0,
+      accentColor: 115,
       saturation: 255,
-      speed: 128
+      speed: 3
     }
   },
   'epilepsy': {
     id: 3,
     name: 'Привет эпилептики',
+    speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
-      speed: 128
+      speed: 3
     }
   },
   'rainbow': {
     id: 4,
     name: 'ЛГБТ',
+    speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
       speed: 128
     }
@@ -50,6 +60,7 @@ const effects = {
       [60, 10, '#9D69D6', '#FFB400'],
       [90, 10, '#006957', '#FFB400']
     ],
+    speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
       speed: 128,
       activeColor: 0
@@ -67,6 +78,7 @@ const effects = {
       [145, 10, '#0022ff', '#8400ff'],
       [170, 10, '#8400ff', '#ae00ff']
     ],
+    speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
       speed: 128,
       activeColor: 0
