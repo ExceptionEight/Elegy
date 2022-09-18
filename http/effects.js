@@ -37,7 +37,7 @@ const effects = {
     name: 'ЛГБТ',
     speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
-      speed: 128
+      speed: 3
     }
   },
   'waves': {
@@ -62,7 +62,7 @@ const effects = {
     ],
     speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
-      speed: 128,
+      speed: 3,
       activeColor: 0
     }
   },
@@ -80,7 +80,7 @@ const effects = {
     ],
     speedParameters: [1, 16, 0, 1.875, false, true],
     settings: {
-      speed: 128,
+      speed: 3,
       activeColor: 0
     }
   }

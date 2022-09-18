@@ -165,11 +165,7 @@ const showEffectSettings = (container, effectKey) => {
     slider.max = effects[effectKey]['speedParameters'][1]
     slider.value = data.speed
     slider.oninput = () => {
-      let result = effects[effectKey]['speedParameters'][5] === true ? Number(slider.value)*(Number(slider.value)+1)/2 : Number(slider.value)
-      result += effects[effectKey]['speedParameters'][2]
-      result = Math.floor (result * effects[effectKey]['speedParameters'][3])
-      result = effects[effectKey]['speedParameters'][4] !== false ? effects[effectKey]['speedParameters'][4] - result : result
-      setSpeed(result)
+      setSpeed (getSpeedValue (effects[effectKey]['speedParameters'], Number(slider.value)))
       data.speed = slider.value
     }
     slider.onmouseup = () => localStorage.setItem(effectKey, JSON.stringify(data))
@@ -191,7 +187,7 @@ const setEffect = key => {
   let query = `id=${effects[key].id}`
   if (settings['accentColor'] != null) query += `&accentColor=${settings['accentColor']}`
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
-  if (settings['speed'] != null) query += `&speed=${settings['speed']}`
+  if (settings['speed'] != null) query += `&speed=${getSpeedValue (effects[key]['speedParameters'], settings['speed'])}`
   if (settings['interval'] != null) query += `&interval=${settings['interval']}`
   if (settings['activeColor'] != null) query += `&accentColor=${effects[key].colorScheme[settings.activeColor][0]}&offset=${effects[key].colorScheme[settings.activeColor][1]}`
   buffer.effect = query
@@ -350,4 +346,12 @@ const switchBlinksMode = () => {
     $.get('powerOff?blinks=-1')
     hideBlinks (false)
   }
+}
+
+const getSpeedValue = (settings, value) => {
+  let result = settings[5] === true ? value*(value+1)/2 : value
+  result += settings[2]
+  result = Math.floor (result * settings[3])
+  result = settings[4] !== false ? settings[4] - result : result
+  return result
 }

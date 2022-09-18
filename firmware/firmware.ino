@@ -25,7 +25,7 @@ struct {
   byte saturation = 255;
   byte value = 128;
   byte offset = 0;
-  uint16_t step = 0;
+  uint step = 0;
   byte mode = 0;
   byte current = 0;
   byte queue[5] = {0, 1, 2, 3, 4}; //using for segments loading animation

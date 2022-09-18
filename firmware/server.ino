@@ -48,6 +48,7 @@ void initWebServerFunctions() {
     switch (id) {
       case 1:
         effect.accentColor = request->getParam("accentColor")->value().toInt();
+        effect.saturation = request->getParam("saturation")->value().toInt();
         break;
       case 2:
         heartbeat = heartbeatPause;
@@ -59,9 +60,16 @@ void initWebServerFunctions() {
         effect.speed = 15;
         fill_solid (leds, NUM_LEDS, CHSV(effect.accentColor, effect.saturation, effect.value));
         break;
+      case 3:
+        effect.speed = request->getParam("speed")->value().toInt();
+        break;
+      case 4:
+        effect.speed = request->getParam("speed")->value().toInt();
+        break;
       case 5:
         effect.accentColor = request->getParam("accentColor")->value().toInt();
         effect.offset = request->getParam("offset")->value().toInt();
+        effect.speed = request->getParam("speed")->value().toInt();
         break;
       case 6:
         segments = segmentsLoading;
@@ -69,12 +77,19 @@ void initWebServerFunctions() {
         FastLED.clear();
         effect.accentColor = request->getParam("accentColor")->value().toInt();
         effect.offset = request->getParam("offset")->value().toInt();
+        effect.speed = request->getParam("speed")->value().toInt();
 
         for (byte i = 0; i < 5; i++) {
-          effect.colorQueue[i] = effect.accentColor + random (effect.offset+1);
+          effect.colorQueue[i] = effect.accentColor + random8 (effect.offset+1);
         }
+        break;
       case 7:
         effect.speed = 15;
+        FastLED.clear();
+        effect.accentColor = request->getParam("accentColor")->value().toInt();
+        effect.saturation = request->getParam("saturation")->value().toInt();
+        effect.interval = request->getParam("speed")->value().toInt();
+        break;
     }
     effect.swapping = false;
   }
