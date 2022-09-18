@@ -187,7 +187,7 @@ const setEffect = key => {
   let query = `id=${effects[key].id}`
   if (settings['accentColor'] != null) query += `&accentColor=${settings['accentColor']}`
   if (settings['saturation'] != null) query += `&saturation=${settings['saturation']}`
-  if (settings['speed'] != null) query += `&speed=${getSpeedValue (effects[key]['speedParameters'], settings['speed'])}`
+  if (settings['speed'] != null) query += `&speed=${getSpeedValue (effects[key]['speedParameters'], Number(settings['speed']))}`
   if (settings['interval'] != null) query += `&interval=${settings['interval']}`
   if (settings['activeColor'] != null) query += `&accentColor=${effects[key].colorScheme[settings.activeColor][0]}&offset=${effects[key].colorScheme[settings.activeColor][1]}`
   buffer.effect = query
