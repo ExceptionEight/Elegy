@@ -116,6 +116,9 @@ void initWebServerFunctions() {
       case 2:
         effect.interval = request->getParam("value")->value().toInt();
         break;
+      case 7:
+        effect.interval = request->getParam("value")->value().toInt();
+        break;
       default:
         effect.speed = request->getParam("value")->value().toInt();
         break;

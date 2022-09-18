@@ -83,5 +83,15 @@ const effects = {
       speed: 3,
       activeColor: 0
     }
+  },
+  'stars': {
+    id: 7,
+    name: 'Звезды',
+    speedParameters: [1, 16, 0, 1, false, true],
+    settings: {
+      accentColor: 115,
+      saturation: 255,
+      speed: 10
+    }
   }
 }

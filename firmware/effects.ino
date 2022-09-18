@@ -205,7 +205,7 @@ void segmentsFill () {
 }
 
 void stars () {
-  if (random8 (10) == 0) {
+  if (random8 (effect.interval) == 0) {
     byte amount = random8 (3);
     for (int i = 0; i < amount; i++) {
       leds[random16(NUM_LEDS)] = CHSV(effect.accentColor, effect.saturation, 255);
