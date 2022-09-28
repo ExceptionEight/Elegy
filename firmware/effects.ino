@@ -219,6 +219,17 @@ void stars () {
   FastLED.show();
 }
 
+void fire () {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    int value = inoise8(i * effect.interval, effect.step);
+    leds[i] = CHSV (effect.accentColor + map(value, 0, 255, 0, effect.offset),
+    constrain (map (value, 0, 255, 255, 235), 0, 255),
+    constrain (map (value, 0, 255, 255, 70), 0, 255));
+  }
+  effect.step += 20;
+  FastLED.show();
+}
+
 void shiftLeds (byte amount) {
   for (int i = NUM_LEDS-1; i > 0; i--) {
     leds[i] = leds[i-1];

@@ -27,6 +27,9 @@ void tickEffect () {
     case 7:
       stars ();
       break;
+    case 8:
+      fire ();
+      break;
     }
   }
 }

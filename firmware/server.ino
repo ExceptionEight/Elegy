@@ -90,6 +90,11 @@ void initWebServerFunctions() {
         effect.saturation = request->getParam("saturation")->value().toInt();
         effect.interval = request->getParam("speed")->value().toInt();
         break;
+      case 8:
+        effect.speed = 15;
+        effect.accentColor = request->getParam("accentColor")->value().toInt();
+        effect.offset = request->getParam("offset")->value().toInt();
+        effect.interval = request->getParam("speed")->value().toInt();
     }
     effect.swapping = false;
   }
@@ -117,6 +122,9 @@ void initWebServerFunctions() {
         effect.interval = request->getParam("value")->value().toInt();
         break;
       case 7:
+        effect.interval = request->getParam("value")->value().toInt();
+        break;
+      case 8:
         effect.interval = request->getParam("value")->value().toInt();
         break;
       default:
