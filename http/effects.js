@@ -98,7 +98,7 @@ const effects = {
       [145, 10, '#0022ff', '#8400ff'],
       [170, 10, '#8400ff', '#ae00ff']
     ],
-    speedParameters: [1, 16, 0, 1.875, false, true],
+    speedParameters: [1, 16, -1, 0.8, false, true],
     settings: {
       speed: 3,
       activeColor: 0
