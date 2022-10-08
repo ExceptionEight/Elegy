@@ -261,6 +261,7 @@ const powerSwitch = () => {
 }
 
 const setWhiteTheme = () => {
+  document.body.style.backgroundColor = "#fff"
   document.getElementById('mainContainer').style.backgroundColor = '#fff'
   document.getElementById('controllCenter').style.backgroundColor = '#fff'
   document.getElementById('controllCenter').style.borderColor = '#000'
@@ -271,6 +272,7 @@ const setWhiteTheme = () => {
 }
 
 const setDarkTheme = () => {
+  document.body.style.backgroundColor = "#222"
   document.getElementById('mainContainer').style.backgroundColor = '#222'
   document.getElementById('controllCenter').style.backgroundColor = '#222'
   document.getElementById('controllCenter').style.borderColor = '#bbb'
@@ -302,6 +304,15 @@ const writeDefaultSettings = () => {
 }
 
 const initialization = () => {
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+  } else {
+    document.getElementById('mainContainer').style.width = '840'
+    document.getElementById('mainContainer').style.margin = '0 auto'
+    document.getElementById('controllCenter').style.width = '840'
+    document.getElementById('controllCenter').style.margin = '0 auto'
+  }
+
   if (localStorage.length === 0) writeDefaultSettings ()
   $.getJSON ('getEnvironment', data => {
     document.getElementById('brightnessSlider').value = data.brightness/10

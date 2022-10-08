@@ -9,6 +9,10 @@ html, body {
   src: url(exo2.ttf);
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 .mainContainer {
   width: 100%;
   height: calc(100% - 60px);
