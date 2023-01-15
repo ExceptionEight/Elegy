@@ -1,6 +1,10 @@
-#include <FTPClient.h>
+//#include <FTPClient.h>
 #include <FTPCommon.h>
 #include <FTPServer.h>
+
+#include <ArduinoJson.h>
+#include <WebSocketsClient_Generic.h>
+#include <Hash.h>
 
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
@@ -8,14 +12,20 @@
 #include <LittleFS.h>
 #include <FastLED.h>
 #include <EEPROM.h>
-#define NUM_LEDS 60
-#define PIN 5
+#define NUM_LEDS 300
+#define DATA_PIN D5
+#define WS_SERVER "lakhta.lemerency.ru" 
+//#define WS_SERVER "//176.118.165.121"
+#define WS_PORT 443 
 AsyncWebServer server(80);
 FTPServer ftp(LittleFS);
+WebSocketsClient webSocket;
 
 CRGB leds[NUM_LEDS];
 byte counter = 0;
 byte brightness = 100;
+
+bool isWSConnected = false;
 
 //unsigned char matrix [1][29][2];
 struct {
@@ -34,10 +44,10 @@ struct {
 } effect;
 
 struct {
-  byte current = 0;
+  byte current = 1;
   byte accentColor = 0;
-  byte speed = 0;
-  byte saturation = 0;
+  byte speed = 100;
+  byte saturation = 255;
   uint step = 0;
   CRGB frame[NUM_LEDS];
 } buffer;
@@ -46,6 +56,7 @@ struct {
   unsigned long powerCycle;
   bool power = false;
   bool blinks = true;
+  char* id = "1";
 } device;
 
 struct {
@@ -74,9 +85,9 @@ void setup()
   EEPROM.begin (512);
   checkEEPROM ();
   recoverUptime ();
-  pinMode (5, OUTPUT);
+  pinMode (D5, OUTPUT);
   pinMode (D4, OUTPUT);
-  FastLED.addLeds<WS2812, PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
+  FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
   FastLED.setBrightness(10);
   Serial.begin(115200);
   LittleFS.begin();
@@ -86,12 +97,18 @@ void setup()
   incrementPowerCycle ();
   initWebServerFunctions();
   server.begin();
+  //webSocket.begin(WS_SERVER, WS_PORT, "/");
+  webSocket.beginSSL(WS_SERVER, WS_PORT);
+  webSocket.onEvent(webSocketEvent);
+  webSocket.setReconnectInterval(5000);
+  webSocket.enableHeartbeat(15000, 3000, 2);
 }
 
 void loop() {
   ftp.handleFTP();
   tickEffect();
   uptimeSaver();
+  webSocket.loop();
   if (Serial.available() >0) {
     int data = Serial.parseInt ();
     if (data <= 117) {

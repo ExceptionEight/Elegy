@@ -1,103 +1,54 @@
 void initWebServerFunctions() {
   server.on("/powerOff", HTTP_GET, [](AsyncWebServerRequest *request){
-    device.power = false;
-    effect.swapping = true;
+    Control control;
     if (request->getParam("blinks")->value().toInt() == -1) {
-      device.blinks = false;
+      control.powerOff (false);
     } else {
-      device.blinks = true;
-      effect.swapping = false;
+      control.powerOff (true);
     } 
-    if (effect.current != 0) {
-      buffer.current = effect.current;
-      buffer.step = effect.step;
-      buffer.speed = effect.speed;
-      memcpy (buffer.frame, leds, sizeof (buffer.frame));
-    }
-      
-    effect.current = 0;
-    effect.step = 0;
-    effect.speed = 10;
-    FastLED.clear();
-    FastLED.show();
     request->send(200);
   });
 
   server.on("/setEffect", HTTP_GET, [](AsyncWebServerRequest *request){
+    Control control;
     byte id = request->getParam("id")->value().toInt();
-     if (device.power == false && buffer.current == id) {
-    device.power = true;
-    effect.swapping = true;
-    effect.current = buffer.current;
-    effect.step = buffer.step;
-    effect.speed = buffer.speed;
-    memcpy (leds, buffer.frame, sizeof (leds));
-    effect.swapping = false;
-    request->send(200);
-    Serial.println ("Fu");
-    return;
-  }
 
-  if (effect.current != id)
-  {
-    device.power = true;
-    effect.swapping = true;
-    effect.current = id;
-    effect.step = 0;
-    effect.mode = 0;
+    if (device.power == false && buffer.current == id) {
+      control.powerOn();
+      return;
+    }
+
+    if (effect.current == id) {
+      request->send(200);
+      return;
+    }
+
     switch (id) {
       case 1:
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.saturation = request->getParam("saturation")->value().toInt();
+        control.setEffect.solidColor (request->getParam("accentColor")->value().toInt(), request->getParam("saturation")->value().toInt());
         break;
       case 2:
-        heartbeat = heartbeatPause;
-        FastLED.clear();
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.saturation = request->getParam("saturation")->value().toInt();
-        effect.interval = request->getParam("speed")->value().toInt();
-        effect.value = 128;
-        effect.speed = 15;
-        fill_solid (leds, NUM_LEDS, CHSV(effect.accentColor, effect.saturation, effect.value));
+        control.setEffect.heartbeatEffect (request->getParam("accentColor")->value().toInt(), request->getParam("saturation")->value().toInt(), request->getParam("speed")->value().toInt());
         break;
       case 3:
-        effect.speed = request->getParam("speed")->value().toInt();
+        control.setEffect.epelepsy (effect.speed = request->getParam("speed")->value().toInt());
         break;
       case 4:
-        effect.speed = request->getParam("speed")->value().toInt();
+        control.setEffect.rainbow (effect.speed = request->getParam("speed")->value().toInt());
         break;
       case 5:
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.offset = request->getParam("offset")->value().toInt();
-        effect.speed = request->getParam("speed")->value().toInt();
+        control.setEffect.wave (request->getParam("accentColor")->value().toInt(), request->getParam("offset")->value().toInt(), request->getParam("speed")->value().toInt());
         break;
       case 6:
-        segments = segmentsLoading;
-        arrayShuffle (effect.queue);
-        FastLED.clear();
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.offset = request->getParam("offset")->value().toInt();
-        effect.speed = request->getParam("speed")->value().toInt();
-
-        for (byte i = 0; i < 5; i++) {
-          effect.colorQueue[i] = effect.accentColor + random8 (effect.offset+1);
-        }
+        control.setEffect.segmentsEffect (request->getParam("accentColor")->value().toInt(), request->getParam("offset")->value().toInt(), request->getParam("speed")->value().toInt());
         break;
       case 7:
-        effect.speed = 15;
-        FastLED.clear();
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.saturation = request->getParam("saturation")->value().toInt();
-        effect.interval = request->getParam("speed")->value().toInt();
+        control.setEffect.stars (request->getParam("accentColor")->value().toInt(), request->getParam("saturation")->value().toInt(), request->getParam("speed")->value().toInt());
         break;
       case 8:
-        effect.speed = 15;
-        effect.accentColor = request->getParam("accentColor")->value().toInt();
-        effect.offset = request->getParam("offset")->value().toInt();
-        effect.interval = request->getParam("speed")->value().toInt();
+        control.setEffect.fire (request->getParam("accentColor")->value().toInt(), request->getParam("offset")->value().toInt(), request->getParam("speed")->value().toInt());
+        break;
     }
-    effect.swapping = false;
-  }
   request->send(200);
   });
 
@@ -135,19 +86,8 @@ void initWebServerFunctions() {
   });
 
   server.on("/setColorRange", HTTP_GET, [](AsyncWebServerRequest *request){
-    effect.swapping = true;
-    effect.accentColor = request->getParam("accentColor")->value().toInt();
-    effect.offset = request->getParam("offset")->value().toInt();
-    switch (effect.current) {
-      case 5:
-        effect.step = 0;
-        break;
-      case 6:
-        if (effect.mode == 1) segmentsFill();
-        break;
-    }
-    
-    effect.swapping = false;
+    Control control;
+    control.setColorRange (request->getParam("accentColor")->value().toInt(), request->getParam("offset")->value().toInt());
     request->send(200);
   });
 
